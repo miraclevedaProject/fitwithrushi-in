@@ -143,12 +143,41 @@
             <input type="file" name="blood_report" accept="image/*,.pdf">
             <div class="file-hint">Photo or PDF of recent reports, if you have them</div>
 
-            <label>Front-facing photo (optional)</label>
-            <input type="file" name="photo_front" accept="image/*">
-            <div class="file-hint">Helps track your transformation progress</div>
+            <h4>Progress Photos</h4>
+            <p style="color:#999;font-size:0.82rem;margin:0 0 10px;">Wear fitted clothes (t-shirt/leggings or sportswear) for accurate tracking</p>
 
-            <label>Back-facing photo (optional)</label>
+            <label>1. Front View</label>
+            <input type="file" name="photo_front" accept="image/*">
+
+            <label>2. Side View</label>
+            <input type="file" name="photo_side" accept="image/*">
+
+            <label>3. Back View</label>
             <input type="file" name="photo_back" accept="image/*">
+
+            <label>4. Face Photo</label>
+            <input type="file" name="photo_face" accept="image/*">
+
+            <h4>Body Measurements</h4>
+            <p style="color:#999;font-size:0.82rem;margin:0 0 10px;">Use a measuring tape, all values in cm</p>
+
+            <label>5. Bust (fullest part)</label>
+            <input name="measure_bust" placeholder="cm">
+
+            <label>6. Waist (at navel)</label>
+            <input name="measure_waist" placeholder="cm">
+
+            <label>7. Hips (widest part)</label>
+            <input name="measure_hips" placeholder="cm">
+
+            <label>8. Arm (upper)</label>
+            <input name="measure_arm" placeholder="cm">
+
+            <label>9. Thigh (upper)</label>
+            <input name="measure_thigh" placeholder="cm">
+
+            <label>10. Calf (widest part)</label>
+            <input name="measure_calf" placeholder="cm">
 
             <h4>Food Allergies</h4>
             <input name="allergies" placeholder="e.g. dairy, gluten, nuts">
@@ -175,7 +204,8 @@
             <select name="meal_frequency"><option>3 meals</option><option>5-6 small meals</option></select>
             <label>Foods you dislike or want to avoid</label><input name="disliked_foods">
 
-            <h4>Plan</h4>
+            <h4>Your Plan</h4>
+            <div id="planLocked" style="display:none;padding:12px;background:#0d0d0d;border:1px solid var(--cta-green);border-radius:8px;color:#fff;font-weight:600;"></div>
             <select name="plan_interested" id="f_plan">
                 <option>1-Month Plan</option><option>3-Month Plan</option><option>6-Month Plan</option>
             </select>
@@ -201,8 +231,14 @@
     if (params.get('whatsapp')) document.getElementById('f_whatsapp').value = params.get('whatsapp');
     if (params.get('email')) document.getElementById('f_email').value = params.get('email');
     if (params.get('plan')) {
+        // Coming from a real payment redirect — this is the plan they already paid for.
+        // Lock it so it can't be accidentally changed on this form.
         const sel = document.getElementById('f_plan');
-        for (const opt of sel.options) { if (opt.value === params.get('plan')) sel.value = opt.value; }
+        const lockedDiv = document.getElementById('planLocked');
+        sel.value = params.get('plan');
+        sel.style.display = 'none';
+        lockedDiv.textContent = '✅ ' + params.get('plan') + ' (confirmed with your payment)';
+        lockedDiv.style.display = 'block';
     }
 
     function buildWhatsAppMessage(data) {
