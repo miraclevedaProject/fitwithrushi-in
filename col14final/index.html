@@ -1677,7 +1677,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                 </div>
                 <div class="transform-video-wrapper">
                     <iframe class="client-video" 
-                            src="https://www.youtube.com/embed/i_vMBvyE23g?autoplay=0&#038;mute=0&#038;controls=1&#038;modestbranding=1&#038;rel=0&#038;showinfo=0&#038;fs=1&#038;cc_load_policy=0&#038;iv_load_policy=3&#038;loop=1&#038;playlist=i_vMBvyE23g&#038;enablejsapi=1" 
+                            src="https://www.youtube.com/embed/CLIENT_VIDEO_ID_1?autoplay=0&#038;mute=0&#038;controls=1&#038;modestbranding=1&#038;rel=0&#038;showinfo=0&#038;fs=1&#038;cc_load_policy=0&#038;iv_load_policy=3&#038;loop=1&#038;playlist=CLIENT_VIDEO_ID_1&#038;enablejsapi=1" 
                             allowfullscreen>
                     </iframe>
                 </div>
@@ -2416,6 +2416,23 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             document.getElementById('mvCheckoutPlanLabel').textContent = planName + " — ₹" + amount;
             document.getElementById('mvCheckoutModal').style.display = 'flex';
         }
+
+        // "Try Again" from a failed-payment email: pre-fill details and reopen checkout automatically
+        (function mvHandleRetryFromEmail() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('retry') !== '1') return;
+
+            const planAmounts = { '1-Month Plan': 1, '3-Month Plan': 1, '6-Month Plan': 1 };
+            const plan = params.get('plan') || '1-Month Plan';
+            const amount = planAmounts[plan] || 1;
+
+            window.addEventListener('load', function () {
+                initiateRazorpay(amount, plan);
+                if (params.get('name')) document.getElementById('mvName').value = params.get('name');
+                if (params.get('whatsapp')) document.getElementById('mvPhone').value = params.get('whatsapp');
+                if (params.get('email')) document.getElementById('mvEmail').value = params.get('email');
+            });
+        })();
 
         function mvCloseCheckout() {
             document.getElementById('mvCheckoutModal').style.display = 'none';
