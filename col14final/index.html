@@ -2412,34 +2412,109 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             });
         });
 
-        // Razorpay Payment Integration
+        // Razorpay Payment Integration (live backend)
+        const MV_API = "https://miracleveda-backend.help-miracleveda.workers.dev";
+        let mvPendingPlan = { amount: 0, planName: "" };
+
         function initiateRazorpay(amount, planName) {
-            alert(`Razorpay Integration:\nAmount: ₹${amount}\nPlan: ${planName}\n\nPlease add your Razorpay API keys to enable payment processing.`);
-            
-            /* Add your Razorpay integration here:
-            var options = {
-                "key": "YOUR_RAZORPAY_KEY_ID",
-                "amount": amount * 100,
-                "currency": "INR",
-                "name": "Rushikesh Umbarkar - Fat Loss Program",
-                "description": planName,
-                "image": "YOUR_LOGO_URL",
-                "handler": function (response){
-                    alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
-                    window.location.href = "thank-you.html";
-                },
-                "prefill": {
-                    "name": "",
-                    "email": "",
-                    "contact": ""
-                },
-                "theme": {
-                    "color": "#00A676"
-                }
-            };
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
-            */
+            mvPendingPlan = { amount, planName };
+            document.getElementById('mvCheckoutPlanLabel').textContent = planName + " — ₹" + amount;
+            document.getElementById('mvCheckoutModal').style.display = 'flex';
+        }
+
+        function mvCloseCheckout() {
+            document.getElementById('mvCheckoutModal').style.display = 'none';
+        }
+
+        async function mvSubmitCheckout() {
+            const name = document.getElementById('mvName').value.trim();
+            const phone = document.getElementById('mvPhone').value.trim();
+            const email = document.getElementById('mvEmail').value.trim();
+            const btn = document.getElementById('mvPayBtn');
+
+            if (!name || !phone) {
+                alert('Please enter your name and WhatsApp number.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Please wait...';
+
+            try {
+                const res = await fetch(MV_API + '/api/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        planName: mvPendingPlan.planName,
+                        amount: mvPendingPlan.amount,
+                        name, phone, email
+                    })
+                });
+                const order = await res.json();
+                if (!order.orderId) throw new Error('Order creation failed');
+
+                const options = {
+                    key: order.keyId,
+                    amount: order.amount,
+                    currency: order.currency,
+                    order_id: order.orderId,
+                    name: "Miracle Veda",
+                    description: mvPendingPlan.planName,
+                    prefill: { name, email, contact: phone },
+                    theme: { color: "#00A676" },
+                    handler: async function (response) {
+                        await fetch(MV_API + '/api/verify-payment', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(response)
+                        });
+                        mvCloseCheckout();
+                        alert('Payment successful! We will contact you on WhatsApp shortly. 🎉');
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            btn.disabled = false;
+                            btn.textContent = 'Proceed to Pay';
+                        }
+                    }
+                };
+                const rzp = new Razorpay(options);
+                rzp.open();
+            } catch (err) {
+                alert('Something went wrong. Please try again or contact us on WhatsApp.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Proceed to Pay';
+            }
+        }
+
+        // Diet Plan Form submission
+        async function mvSubmitDietForm(e) {
+            e.preventDefault();
+            const btn = document.getElementById('mvDietSubmitBtn');
+            const form = document.getElementById('mvDietForm');
+            const data = Object.fromEntries(new FormData(form).entries());
+
+            if (!data.name || !data.whatsapp) {
+                alert('Please enter your name and WhatsApp number.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+            try {
+                await fetch(MV_API + '/api/submit-diet-form', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                document.getElementById('mvDietFormWrap').style.display = 'none';
+                document.getElementById('mvDietFormSuccess').style.display = 'block';
+            } catch (err) {
+                alert('Something went wrong submitting the form. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Submit My Details';
+            }
         }
 
         // Video Auto-Pause
@@ -2506,6 +2581,100 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             observer.observe(el);
         });
     </script>
+
+    <!-- Razorpay Checkout -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- ===== Checkout Modal ===== -->
+    <div id="mvCheckoutModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:16px;">
+        <div style="background:#1A1A1A;border:2px solid #00A676;border-radius:12px;padding:24px;max-width:380px;width:100%;position:relative;">
+            <button onclick="mvCloseCheckout()" style="position:absolute;top:10px;right:14px;background:none;border:none;color:#888;font-size:22px;cursor:pointer;">&times;</button>
+            <h3 style="color:#fff;margin:0 0 6px;font-family:'Montserrat',sans-serif;">Complete Your Details</h3>
+            <p id="mvCheckoutPlanLabel" style="color:#00A676;font-weight:700;margin:0 0 16px;"></p>
+            <input id="mvName" type="text" placeholder="Full Name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#fff;box-sizing:border-box;">
+            <input id="mvPhone" type="tel" placeholder="WhatsApp Number" style="width:100%;padding:12px;margin-bottom:10px;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#fff;box-sizing:border-box;">
+            <input id="mvEmail" type="email" placeholder="Email (optional)" style="width:100%;padding:12px;margin-bottom:16px;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#fff;box-sizing:border-box;">
+            <button id="mvPayBtn" onclick="mvSubmitCheckout()" style="width:100%;padding:14px;background:#00A676;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:1rem;cursor:pointer;">Proceed to Pay</button>
+        </div>
+    </div>
+
+    <!-- ===== Diet Plan Request Form ===== -->
+    <section class="section section-black" id="diet-form">
+        <div class="container" style="max-width:640px;">
+            <h2 class="section-title">GET YOUR <span class="green">CUSTOM DIET PLAN</span></h2>
+            <p class="section-subtitle">Fill in your details and Rushikesh will personally prepare your fat-loss diet plan.</p>
+
+            <div id="mvDietFormWrap">
+            <form id="mvDietForm" onsubmit="mvSubmitDietForm(event)" style="background:#1A1A1A;border:2px solid #00A676;border-radius:10px;padding:22px;margin-top:16px;">
+                <style>
+                    #mvDietForm label{display:block;color:#ccc;font-size:0.85rem;margin:12px 0 4px;font-weight:600;}
+                    #mvDietForm input, #mvDietForm select, #mvDietForm textarea{width:100%;padding:10px;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#fff;box-sizing:border-box;font-size:0.9rem;}
+                    #mvDietForm h4{color:#00A676;margin:18px 0 4px;font-size:0.95rem;border-top:1px solid #333;padding-top:14px;}
+                    #mvDietForm h4:first-child{border-top:none;padding-top:0;margin-top:0;}
+                </style>
+
+                <h4>1️⃣ Contact Details</h4>
+                <label>Name *</label><input name="name" required>
+                <label>WhatsApp Number *</label><input name="whatsapp" type="tel" required>
+                <label>Email (optional)</label><input name="email" type="email">
+
+                <h4>2️⃣ Personal Details</h4>
+                <label>Gender</label>
+                <select name="gender"><option>Male</option><option>Female</option><option>Other</option></select>
+                <label>Age</label><input name="age">
+                <label>Weight</label><input name="weight" placeholder="e.g. 78 kg">
+                <label>Height</label><input name="height" placeholder="e.g. 170 cm">
+
+                <h4>3️⃣ Diet Preference</h4>
+                <select name="diet_preference">
+                    <option>Vegetarian</option><option>Non-vegetarian</option><option>Both</option><option>Eggetarian</option>
+                </select>
+
+                <h4>4️⃣ Health Information</h4>
+                <label>Any health issues? (thyroid, diabetes, BP, etc.)</label>
+                <textarea name="health_issues" rows="2"></textarea>
+                <label>Currently taking any medications?</label>
+                <input name="medications">
+
+                <h4>5️⃣ Food Allergies</h4>
+                <input name="allergies" placeholder="e.g. dairy, gluten, nuts">
+
+                <h4>6️⃣ Workout Plan</h4>
+                <select name="workout_plan"><option>Home</option><option>Gym</option><option>Only walking</option></select>
+
+                <h4>7️⃣ Food Preference</h4>
+                <label>South Indian food?</label>
+                <select name="south_indian_pref"><option>Yes</option><option>No</option><option>Occasionally</option></select>
+
+                <h4>8️⃣ Habits</h4>
+                <label>Do you smoke?</label>
+                <select name="smoke"><option>No</option><option>Yes</option></select>
+                <label>Do you drink alcohol? (if yes, how often)</label>
+                <input name="alcohol">
+
+                <h4>9️⃣ Lifestyle & Goals</h4>
+                <label>Sleep hours & time</label><input name="sleep_hours">
+                <label>Daily routine (active/sedentary, job type)</label><input name="daily_routine">
+                <label>Main challenges with your weight</label><textarea name="challenges" rows="2"></textarea>
+                <label>Target weight loss goal & timeframe</label><input name="target_goal">
+                <label>Preferred meal frequency</label>
+                <select name="meal_frequency"><option>3 meals</option><option>5-6 small meals</option></select>
+                <label>Foods you dislike or want to avoid</label><input name="disliked_foods">
+
+                <h4>🔟 Plan Interested In</h4>
+                <select name="plan_interested">
+                    <option>1-Month Plan</option><option>3-Month Plan</option><option>6-Month Plan</option><option>Not sure yet</option>
+                </select>
+
+                <button id="mvDietSubmitBtn" type="submit" style="width:100%;margin-top:20px;padding:14px;background:#00A676;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:1rem;cursor:pointer;">Submit My Details</button>
+            </form>
+            </div>
+            <div id="mvDietFormSuccess" style="display:none;background:#1A1A1A;border:2px solid #00A676;border-radius:10px;padding:30px;margin-top:16px;text-align:center;">
+                <h3 style="color:#00A676;">✅ Thank you!</h3>
+                <p style="color:#ccc;">We've received your details. Rushikesh will reach out on WhatsApp with your custom diet plan soon.</p>
+            </div>
+        </div>
+    </section>
 
 </body>
 </html>
