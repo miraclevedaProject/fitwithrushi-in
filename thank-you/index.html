@@ -162,6 +162,7 @@
 
     <div class="card" id="formCard">
         <form id="dietForm">
+            <input type="hidden" name="order_id" id="f_order_id">
             <h4>Contact Details</h4>
             <label>Name *</label><input name="name" id="f_name" required>
             <label>WhatsApp Number *</label><input name="whatsapp" id="f_whatsapp" type="tel" required>
@@ -212,7 +213,7 @@
             <input type="hidden" name="workout_plan" id="h_workout_plan">
 
             <h4>Food Preference *</h4>
-            <label>South Indian food?</label>
+            <label>Do you enjoy South Indian food (idli, dosa, sambar, etc.)?</label>
             <div class="tap-group" data-field="south_indian_pref" data-required="true">
                 <button type="button" class="tap-option">Yes</button>
                 <button type="button" class="tap-option">No</button>
@@ -231,13 +232,21 @@
             <input name="alcohol">
 
             <h4>Lifestyle & Goals</h4>
-            <label>Sleep hours & time</label><input name="sleep_hours">
-            <label>Daily routine (active/sedentary, job type)</label><input name="daily_routine">
-            <label>Main challenges with your weight</label><textarea name="challenges" rows="2"></textarea>
-            <label>Target weight loss goal & timeframe</label><input name="target_goal">
-            <label>Preferred meal frequency</label>
-            <select name="meal_frequency"><option>3 meals</option><option>5-6 small meals</option></select>
-            <label>Foods you dislike or want to avoid</label><input name="disliked_foods">
+            <label>How many hours do you sleep, and what time do you usually go to bed?</label>
+            <input name="sleep_hours" placeholder="e.g. 7 hours, sleep by 11 PM">
+            <label>What does a typical day look like for you? (desk job, on your feet all day, etc.)</label>
+            <input name="daily_routine" placeholder="e.g. desk job, sit most of the day">
+            <label>What's the biggest struggle that stops you from losing weight?</label>
+            <textarea name="challenges" rows="2" placeholder="e.g. late-night cravings, no time to cook, eating out often"></textarea>
+            <label>How much weight do you want to lose, and by when?</label>
+            <input name="target_goal" placeholder="e.g. 10 kg in 3 months">
+            <label>How many times a day do you prefer to eat?</label>
+            <div class="tap-group" data-field="meal_frequency">
+                <button type="button" class="tap-option">3 meals</button>
+                <button type="button" class="tap-option">5-6 small meals</button>
+            </div>
+            <input type="hidden" name="meal_frequency" id="h_meal_frequency">
+            <label>Any foods you dislike or want to avoid?</label><input name="disliked_foods">
 
             <h4>Your Plan</h4>
             <div id="planLocked" style="display:none;padding:12px;background:#0d0d0d;border:1px solid var(--cta-green);border-radius:8px;color:#fff;font-weight:600;"></div>
@@ -275,6 +284,7 @@
     if (params.get('name')) document.getElementById('f_name').value = params.get('name');
     if (params.get('whatsapp')) document.getElementById('f_whatsapp').value = params.get('whatsapp');
     if (params.get('email')) document.getElementById('f_email').value = params.get('email');
+    if (params.get('order')) document.getElementById('f_order_id').value = params.get('order');
     if (params.get('plan')) {
         const sel = document.getElementById('f_plan');
         const lockedDiv = document.getElementById('planLocked');
@@ -370,6 +380,7 @@
                 body: formData
             });
             document.getElementById('formCard').style.display = 'none';
+            document.querySelector('.success-badge').style.display = 'none';
             document.getElementById('successView').style.display = 'block';
         } catch (err) {
             alert('Something went wrong. Please try again or use the WhatsApp option below.');
