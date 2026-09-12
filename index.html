@@ -2422,6 +2422,9 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             mvPendingPlan = { amount, planName };
             document.getElementById('mvCheckoutPlanLabel').textContent = planName + " — ₹" + amount;
             document.getElementById('mvCheckoutModal').style.display = 'flex';
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'InitiateCheckout', { value: amount, currency: 'INR', content_name: planName });
+            }
         }
 
         // "Try Again" from a failed-payment email: pre-fill details and reopen checkout automatically
@@ -2497,7 +2500,8 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                             '&name=' + encodeURIComponent(name) +
                             '&whatsapp=' + encodeURIComponent(phone) +
                             '&email=' + encodeURIComponent(email) +
-                            '&plan=' + encodeURIComponent(mvPendingPlan.planName);
+                            '&plan=' + encodeURIComponent(mvPendingPlan.planName) +
+                            '&amount=' + encodeURIComponent(mvPendingPlan.amount);
                     },
                     modal: {
                         ondismiss: function () {

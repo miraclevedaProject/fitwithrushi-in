@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '3144157445775942');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Thank You — Miracle Veda</title>
@@ -281,6 +299,16 @@
     const API = "https://miracleveda-backend.help-miracleveda.workers.dev";
     const params = new URLSearchParams(window.location.search);
 
+    // This page loads right after a successful payment — fire the Purchase event
+    // once here (only if we genuinely have an order + amount, i.e. came from checkout).
+    if (params.get('order') && params.get('amount') && typeof fbq !== 'undefined') {
+        fbq('track', 'Purchase', {
+            value: parseFloat(params.get('amount')),
+            currency: 'INR',
+            content_name: params.get('plan') || 'Miracle Veda Plan'
+        });
+    }
+
     if (params.get('name')) document.getElementById('f_name').value = params.get('name');
     if (params.get('whatsapp')) document.getElementById('f_whatsapp').value = params.get('whatsapp');
     if (params.get('email')) document.getElementById('f_email').value = params.get('email');
@@ -382,6 +410,9 @@
             document.getElementById('formCard').style.display = 'none';
             document.querySelector('.success-badge').style.display = 'none';
             document.getElementById('successView').style.display = 'block';
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Lead', { content_name: 'Diet Plan Questionnaire' });
+            }
         } catch (err) {
             alert('Something went wrong. Please try again or use the WhatsApp option below.');
             btn.disabled = false;
