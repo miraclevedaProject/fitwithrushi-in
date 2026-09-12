@@ -305,8 +305,10 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         fbq('track', 'Purchase', {
             value: parseFloat(params.get('amount')),
             currency: 'INR',
-            content_name: params.get('plan') || 'Miracle Veda Plan'
-        });
+            content_name: params.get('plan') || 'Miracle Veda Plan',
+            content_type: 'coaching_program',
+            content_ids: ['mv-coaching-' + (params.get('plan') || 'plan').toLowerCase().replace(/[^a-z0-9]+/g, '-')]
+        }, { eventID: 'purchase_' + params.get('order') });
     }
 
     if (params.get('name')) document.getElementById('f_name').value = params.get('name');
@@ -411,7 +413,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             document.querySelector('.success-badge').style.display = 'none';
             document.getElementById('successView').style.display = 'block';
             if (typeof fbq !== 'undefined') {
-                fbq('track', 'Lead', { content_name: 'Diet Plan Questionnaire' });
+                fbq('track', 'Lead', { content_name: 'Diet Plan Questionnaire', content_type: 'coaching_program' });
             }
         } catch (err) {
             alert('Something went wrong. Please try again or use the WhatsApp option below.');
