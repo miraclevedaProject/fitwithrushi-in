@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W4YVCF7Y9G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-W4YVCF7Y9G');
+</script>
+<!-- End Google Analytics -->
+
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -311,6 +321,21 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         }, { eventID: 'purchase_' + params.get('order') });
     }
 
+    // GA4 purchase event (same trigger as the Meta one above)
+    if (params.get('order') && params.get('amount') && typeof gtag !== 'undefined') {
+        gtag('event', 'purchase', {
+            transaction_id: params.get('order'),
+            value: parseFloat(params.get('amount')),
+            currency: 'INR',
+            items: [{
+                item_id: 'mv-coaching',
+                item_name: params.get('plan') || 'Miracle Veda Plan',
+                price: parseFloat(params.get('amount')),
+                quantity: 1
+            }]
+        });
+    }
+
     if (params.get('name')) document.getElementById('f_name').value = params.get('name');
     if (params.get('whatsapp')) document.getElementById('f_whatsapp').value = params.get('whatsapp');
     if (params.get('email')) document.getElementById('f_email').value = params.get('email');
@@ -417,6 +442,9 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     { content_name: 'Diet Plan Questionnaire', content_type: 'coaching_program' },
                     { eventID: 'lead_' + (params.get('order') || '') }
                 );
+            }
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'generate_lead', { currency: 'INR', value: 0 });
             }
         } catch (err) {
             alert('Something went wrong. Please try again or use the WhatsApp option below.');

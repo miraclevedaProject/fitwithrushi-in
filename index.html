@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en-US">
 	<head>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W4YVCF7Y9G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-W4YVCF7Y9G');
+</script>
+<!-- End Google Analytics -->
+
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="profile" href="http://gmpg.org/xfn/11">
@@ -2424,6 +2434,12 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             document.getElementById('mvCheckoutModal').style.display = 'flex';
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'InitiateCheckout', { value: amount, currency: 'INR', content_name: planName, content_type: 'coaching_program', content_ids: ['mv-coaching-' + planName.toLowerCase().replace(/[^a-z0-9]+/g,'-')] });
+            }
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'begin_checkout', {
+                    value: amount, currency: 'INR',
+                    items: [{ item_id: 'mv-coaching', item_name: planName, price: amount, quantity: 1 }]
+                });
             }
         }
 
