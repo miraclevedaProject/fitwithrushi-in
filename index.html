@@ -658,7 +658,8 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             border-color: transparent transparent transparent #fff;
         }
         .mv-player:hover .mv-play { transform: scale(1.1); background: #00A676; }
-        .mv-player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+        .mv-player iframe,
+        .mv-player .mv-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
 
         /* Make casual saving harder: no long-press save sheet on iOS/Android,
@@ -2675,45 +2676,84 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             });
         })();
 
-        // Videos load only on tap. Starting one removes every other player from
-        // the DOM, so the previous video genuinely stops instead of just muting.
+        // One tap = plays, with sound.
+        //
+        // Browsers refuse UNMUTED autoplay on a fresh cross-origin iframe, which is
+        // what produced a black frame and forced a second tap. So the player starts
+        // muted (always permitted) and is unmuted the instant it begins playing —
+        // the tap that started it counts as the gesture, so the sound is allowed.
         (function () {
-            var PARAMS = 'autoplay=1&mute=0&playsinline=1&rel=0&controls=1' +
-                         '&modestbranding=1&iv_load_policy=3&disablekb=1&fs=1';
+            var apiReady = false, queued = null, players = {};
 
-            function resetAll(except) {
-                document.querySelectorAll('.mv-player').forEach(function (p) {
-                    if (p === except) return;
-                    var f = p.querySelector('iframe');
-                    if (f) {
-                        f.remove();
-                        p.querySelector('.mv-poster').style.display = '';
-                        p.querySelector('.mv-play').style.display = '';
+            var tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            document.head.appendChild(tag);
+
+            window.onYouTubeIframeAPIReady = function () {
+                apiReady = true;
+                if (queued) { var p = queued; queued = null; start(p); }
+            };
+
+            function showPoster(el) {
+                var f = el.querySelector('.mv-frame, iframe');
+                if (f) f.remove();
+                el.querySelector('.mv-poster').style.display = '';
+                el.querySelector('.mv-play').style.display = '';
+            }
+
+            function stopOthers(keep) {
+                Object.keys(players).forEach(function (vid) {
+                    if (vid === keep) return;
+                    try { players[vid].destroy(); } catch (e) {}
+                    delete players[vid];
+                    var el = document.querySelector('.mv-player[data-vid="' + vid + '"]');
+                    if (el) showPoster(el);
+                });
+            }
+
+            function start(el) {
+                var vid = el.dataset.vid;
+                if (players[vid]) return;
+                stopOthers(vid);
+
+                el.querySelector('.mv-poster').style.display = 'none';
+                el.querySelector('.mv-play').style.display = 'none';
+
+                var host = document.createElement('div');
+                host.className = 'mv-frame';
+                el.appendChild(host);
+
+                players[vid] = new YT.Player(host, {
+                    videoId: vid,
+                    playerVars: {
+                        autoplay: 1, mute: 1, playsinline: 1, rel: 0,
+                        controls: 1, modestbranding: 1, iv_load_policy: 3,
+                        disablekb: 1, fs: 1
+                    },
+                    events: {
+                        onReady: function (e) { e.target.playVideo(); },
+                        onStateChange: function (e) {
+                            if (e.data === YT.PlayerState.PLAYING) {
+                                e.target.unMute();
+                                e.target.setVolume(100);
+                            }
+                        }
                     }
                 });
             }
 
-            function play(p) {
-                if (p.querySelector('iframe')) return;
-                resetAll(p);
-                var f = document.createElement('iframe');
-                // allow/allowfullscreen must be set BEFORE src, otherwise the frame
-                // starts loading without autoplay permission and YouTube shows its
-                // own play button — which is what forced a second click.
-                f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
-                f.setAttribute('allowfullscreen', '');
-                f.setAttribute('title', p.getAttribute('aria-label') || 'Client story');
-                f.setAttribute('frameborder', '0');
-                f.src = 'https://www.youtube.com/embed/' + p.dataset.vid + '?' + PARAMS;
-                p.appendChild(f);
-                p.querySelector('.mv-poster').style.display = 'none';
-                p.querySelector('.mv-play').style.display = 'none';
+            function onTap(el) {
+                if (apiReady && window.YT && YT.Player) start(el);
+                else {
+                    queued = el;
+                    el.querySelector('.mv-play').style.opacity = '.55';
+                }
             }
 
-            document.querySelectorAll('.mv-player').forEach(function (p) {
-                p.addEventListener('click', function () { play(p); });
-                p.addEventListener('keydown', function (e) {
-                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(p); }
+            document.querySelectorAll('.mv-player').forEach(function (el) {
+                el.addEventListener('click', function () { onTap(el); });
+                el.addEventListener('keydown', function (ev) {
+                    if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); onTap(el); }
                 });
             });
         })();
