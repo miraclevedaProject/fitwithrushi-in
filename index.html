@@ -2697,10 +2697,14 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                 if (p.querySelector('iframe')) return;
                 resetAll(p);
                 var f = document.createElement('iframe');
-                f.src = 'https://www.youtube.com/embed/' + p.dataset.vid + '?' + PARAMS;
-                f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+                // allow/allowfullscreen must be set BEFORE src, otherwise the frame
+                // starts loading without autoplay permission and YouTube shows its
+                // own play button — which is what forced a second click.
+                f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
                 f.setAttribute('allowfullscreen', '');
                 f.setAttribute('title', p.getAttribute('aria-label') || 'Client story');
+                f.setAttribute('frameborder', '0');
+                f.src = 'https://www.youtube.com/embed/' + p.dataset.vid + '?' + PARAMS;
                 p.appendChild(f);
                 p.querySelector('.mv-poster').style.display = 'none';
                 p.querySelector('.mv-play').style.display = 'none';
