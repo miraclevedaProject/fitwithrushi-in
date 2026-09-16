@@ -2995,43 +2995,100 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             });
         })();
 
-        // Only ONE YouTube player exists on the page at any moment.
+        // Two strategies, because the platforms genuinely differ:
         //
-        // Fourteen live embeds were too much for mid-range Android: the JS API
-        // could not reliably pause them, so taps stacked up and every video
-        // played at once. A poster sits in place of each player and the real
-        // iframe is created on tap, after removing whichever one was running.
-        // Nothing to pause means nothing can overlap, on any device.
+        // iOS Safari refuses to autoplay an iframe that JavaScript created from
+        // a tap on something else — that is what forced a second tap there. So
+        // on iOS the real players are built up front and the JS API pauses the
+        // others, which iOS handles fine.
         //
-        // The player starts muted because muted autoplay is the only kind no
-        // browser blocks — that is what keeps it to a single tap on iOS — and
-        // it is unmuted as soon as it begins playing.
+        // Android could not manage fourteen live players: the API's pause and
+        // stop commands were dropped, so every video played at once and clips
+        // looped. There, a poster stands in for each player and only ONE iframe
+        // ever exists, so overlapping is impossible rather than merely handled.
         (function () {
-            var current = null;
+            var IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-            function restore(btn) {
-                var f = btn.querySelector('iframe');
-                if (f) f.remove();
-                btn.classList.remove('playing');
+            var buttons = [].slice.call(document.querySelectorAll('.vplay'));
+            if (!buttons.length) return;
+
+            function srcFor(vid, autoplay) {
+                return 'https://www.youtube.com/embed/' + vid +
+                       '?' + (autoplay ? 'autoplay=1&mute=1&' : '') +
+                       'playsinline=1&rel=0&controls=1&modestbranding=1' +
+                       '&iv_load_policy=3&disablekb=1&fs=1&enablejsapi=1' +
+                       '&origin=' + encodeURIComponent(location.origin);
             }
 
+            function makeFrame(vid, label, autoplay) {
+                var f = document.createElement('iframe');
+                f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
+                f.setAttribute('allowfullscreen', '');
+                f.setAttribute('frameborder', '0');
+                f.setAttribute('title', label || 'Client story');
+                f.src = srcFor(vid, autoplay);
+                return f;
+            }
+
+            if (IS_IOS) {
+                var players = [], unmuted = {};
+
+                window.onYouTubeIframeAPIReady = function () {
+                    buttons.forEach(function (btn, i) {
+                        players[i] = new YT.Player(btn.querySelector('iframe'), {
+                            events: {
+                                onStateChange: function (e) {
+                                    if (e.data === YT.PlayerState.ENDED) {
+                                        try { e.target.stopVideo(); } catch (err) {}
+                                        return;
+                                    }
+                                    if (e.data !== YT.PlayerState.PLAYING) return;
+                                    if (!unmuted[i]) {
+                                        unmuted[i] = true;
+                                        try {
+                                            if (e.target.isMuted()) e.target.unMute();
+                                            if (e.target.getVolume() < 30) e.target.setVolume(100);
+                                        } catch (err) {}
+                                    }
+                                    players.forEach(function (p) {
+                                        if (p === e.target) return;
+                                        try {
+                                            if (p.getPlayerState() === YT.PlayerState.PLAYING) p.pauseVideo();
+                                        } catch (err) {}
+                                    });
+                                }
+                            }
+                        });
+                    });
+                };
+
+                buttons.forEach(function (btn) {
+                    btn.classList.add('playing');          // hide poster and play badge
+                    btn.appendChild(makeFrame(btn.dataset.vid, btn.getAttribute('aria-label'), false));
+                });
+
+                var tag = document.createElement('script');
+                tag.src = 'https://www.youtube.com/iframe_api';
+                document.head.appendChild(tag);
+                return;
+            }
+
+            // ---- everything else: one player at a time ----
+            var current = null;
+
             function stopCurrent() {
-                if (current) { restore(current); current = null; }
+                if (!current) return;
+                var f = current.querySelector('iframe');
+                if (f) f.remove();
+                current.classList.remove('playing');
+                current = null;
             }
 
             function play(btn) {
                 if (btn.classList.contains('playing')) return;
                 stopCurrent();
-
-                var f = document.createElement('iframe');
-                f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
-                f.setAttribute('allowfullscreen', '');
-                f.setAttribute('frameborder', '0');
-                f.setAttribute('title', btn.getAttribute('aria-label') || 'Client story');
-                f.src = 'https://www.youtube.com/embed/' + btn.dataset.vid +
-                        '?autoplay=1&mute=1&playsinline=1&rel=0&controls=1' +
-                        '&modestbranding=1&iv_load_policy=3&disablekb=1&fs=1' +
-                        '&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
+                var f = makeFrame(btn.dataset.vid, btn.getAttribute('aria-label'), true);
                 btn.appendChild(f);
                 btn.classList.add('playing');
                 current = btn;
@@ -3052,7 +3109,6 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                 });
             }
 
-            // When a clip finishes, tear the player down so it cannot replay.
             window.addEventListener('message', function (ev) {
                 if (typeof ev.data !== 'string' || ev.data.indexOf('info') === -1) return;
                 var d;
@@ -3060,7 +3116,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                 if (d && d.info && d.info.playerState === 0) stopCurrent();
             });
 
-            document.querySelectorAll('.vplay').forEach(function (btn) {
+            buttons.forEach(function (btn) {
                 btn.addEventListener('click', function () { play(btn); });
             });
         })();
