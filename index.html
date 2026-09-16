@@ -732,6 +732,39 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             .hiw-body p { font-size: 0.93rem; }
         }
 
+
+        /* --- compact client video grid --- */
+        .mini-video-section {
+            background: var(--white-bg);
+            padding: 30px 0 34px;
+        }
+        .mini-video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            max-width: 560px;
+            margin: 24px auto 0;
+        }
+        .mini-video {
+            width: 100%;
+            padding-bottom: 177.78%;      /* 9:16, same shape as the shorts */
+            position: relative;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--cta-green);
+        }
+        .mini-video iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        @media (max-width: 768px) {
+            .mini-video-grid { gap: 10px; max-width: 100%; }
+        }
+
         .manual-slider-container {
             overflow-x: auto;
             overflow-y: hidden;
@@ -2343,6 +2376,27 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
                 <div class="pro-tip-box">
                     <p>💡 <span class="highlight">97% OF CLIENTS</span> WHO CHOOSE <strong>3-MONTH OR 6-MONTH PLANS</strong> ACHIEVE THEIR FULL FAT LOSS GOALS BECAUSE <span class="highlight">LONGER DURATION = BETTER HABIT FORMATION</span> + <strong>CONSISTENT SUPPORT</strong> = <span class="highlight">PERMANENT RESULTS!</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- More client videos - WHITE -->
+    <section class="mini-video-section">
+        <div class="container">
+            <h2 class="section-title section-title-dark">WATCH WHAT HAPPENED <span class="green">AFTER THEY STARTED</span></h2>
+            <div class="mini-video-grid">
+                <div class="mini-video">
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/CXnK9KI-DOE?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Client story 1 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="mini-video">
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/x7rR4urrjX0?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Client story 2 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="mini-video">
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/3qDlpfx6Lag?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Client story 3 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="mini-video">
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/8xoCafp5qoA?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Client story 4 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
