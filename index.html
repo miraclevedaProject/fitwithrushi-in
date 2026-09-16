@@ -2614,10 +2614,14 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         })();
 
         // Players are real YouTube embeds so a single tap starts them everywhere,
-        // including iOS Safari. The IFrame API is used only to pause whichever
-        // video was already running when a new one is started.
+        // including iOS Safari. The IFrame API is used for two things:
+        //   1. pause whichever video was already running
+        //   2. unmute on first play — YouTube remembers a viewer's mute preference
+        //      across visits, so a player can otherwise open silently. Only the
+        //      first play of each video is unmuted, so if the viewer chooses to
+        //      mute it afterwards that choice is left alone.
         (function () {
-            var players = [];
+            var players = [], unmuted = [];
 
             var tag = document.createElement('script');
             tag.src = 'https://www.youtube.com/iframe_api';
@@ -2629,6 +2633,15 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                         events: {
                             onStateChange: function (e) {
                                 if (e.data !== YT.PlayerState.PLAYING) return;
+
+                                if (!unmuted[i]) {
+                                    unmuted[i] = true;
+                                    try {
+                                        if (e.target.isMuted()) e.target.unMute();
+                                        if (e.target.getVolume() < 30) e.target.setVolume(100);
+                                    } catch (err) {}
+                                }
+
                                 players.forEach(function (p) {
                                     if (p === e.target) return;
                                     try {
