@@ -496,10 +496,22 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         .nonsense-item {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 5px;
             height: 100%;
         }
         @media (max-width: 900px) {
-            .nonsense-grid { grid-template-columns: repeat(2, 1fr); }
+            .nonsense-grid { gap: 6px; }
+            .nonsense-item { padding: 9px 4px; gap: 3px; text-align: center; }
+            .nonsense-item i { font-size: 0.85rem; }
+            .nonsense-item span { font-size: 0.63rem; line-height: 1.15; letter-spacing: 0; }
+        }
+        @media (max-width: 420px) {
+            .nonsense-grid { gap: 5px; }
+            .nonsense-item { padding: 8px 3px; }
+            .nonsense-item span { font-size: 0.56rem; }
         }
 
         .nonsense-item {
@@ -896,6 +908,19 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             flex-shrink: 0;
             fill: currentColor;
             vertical-align: -0.16em;
+        }
+
+
+        @media (max-width: 768px) {
+            .cta-button {
+                font-size: 0.82rem;
+                padding: 15px 14px;
+                white-space: nowrap;
+                letter-spacing: 0;
+            }
+        }
+        @media (max-width: 380px) {
+            .cta-button { font-size: 0.74rem; padding: 14px 10px; }
         }
 
         .manual-slider-container {
@@ -2024,7 +2049,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> JAYESH &middot; MAHARASHTRA
                 </div>
                 <div class="transform-video-wrapper">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/BSa18c9AqYM?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Jayesh — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/BSa18c9AqYM?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Jayesh — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -2036,7 +2061,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> VARDHINI &middot; TELANGANA
                 </div>
                 <div class="transform-video-wrapper">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/OrYY9OxRVIE?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Vardhini — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/OrYY9OxRVIE?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Vardhini — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -2048,7 +2073,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> MANISH &middot; UTTAR PRADESH
                 </div>
                 <div class="transform-video-wrapper">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/RB8DhnQ8ci8?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Manish — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/RB8DhnQ8ci8?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Manish — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -2060,7 +2085,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> DIYASHA &middot; WEST BENGAL
                 </div>
                 <div class="transform-video-wrapper">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/DjLIlmFPMnk?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Diyasha — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/DjLIlmFPMnk?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Diyasha — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -2072,7 +2097,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> SOUNDARYA &middot; KARNATAKA
                 </div>
                 <div class="transform-video-wrapper">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/tNoES2HH1-I?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Soundarya — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/tNoES2HH1-I?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Soundarya — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -2084,7 +2109,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> SUBHADIP &middot; WEST BENGAL
                 </div>
                 <div class="transform-video-wrapper">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/WXWV4CTwQyc?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Subhadip — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/WXWV4CTwQyc?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Subhadip — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -2096,7 +2121,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> ZAINAB &middot; DELHI
                 </div>
                 <div class="transform-video-wrapper">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/M2WIlC-CCrc?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Zainab — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/M2WIlC-CCrc?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Zainab — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -2108,7 +2133,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> NIKITHA &middot; KARNATAKA
                 </div>
                 <div class="transform-video-wrapper">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/tvbiFDLcodU?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Nikitha — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/tvbiFDLcodU?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Nikitha — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -2120,7 +2145,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> MAMALI &middot; ODISHA
                 </div>
                 <div class="transform-video-wrapper">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/oKyYymV0IyY?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Mamali — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/oKyYymV0IyY?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Mamali — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -2132,7 +2157,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> KHUMAN DHARA &middot; GUJARAT
                 </div>
                 <div class="transform-video-wrapper">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/R0QWdEIMRHM?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Khuman Dhara — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/R0QWdEIMRHM?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Khuman Dhara — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
@@ -2539,16 +2564,16 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             <h2 class="section-title section-title-dark" style="margin-bottom:0;">WATCH WHAT HAPPENED <span class="green">AFTER THEY STARTED</span></h2>
             <div class="mini-video-grid">
                 <div class="mini-video">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/CXnK9KI-DOE?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Client story 1 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/CXnK9KI-DOE?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Client story 1 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
                 <div class="mini-video">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/x7rR4urrjX0?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Client story 2 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/x7rR4urrjX0?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Client story 2 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
                 <div class="mini-video">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/3qDlpfx6Lag?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Client story 3 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/3qDlpfx6Lag?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Client story 3 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
                 <div class="mini-video">
-                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/8xoCafp5qoA?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Client story 4 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/8xoCafp5qoA?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1&amp;origin=https://miracleveda.pages.dev&amp;widget_referrer=https://miracleveda.pages.dev" title="Client story 4 — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
@@ -2700,7 +2725,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
        target="_blank"
        id="mvFloatingWa"
        style="position:fixed;right:18px;bottom:90px;z-index:1001;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.4);text-decoration:none;">
-        <svg class="wa-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" style="color:#fff;width:30px;height:30px;"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35z"/><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.13h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.36c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.41a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23z"/></svg>
+        <svg class="wa-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" style="color:#fff;width:36px;height:36px;"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35z"/><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.13h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.36c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.41a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23z"/></svg>
     </a>
 
     <div class="fixed-cta-bar">
