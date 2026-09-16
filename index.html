@@ -2615,46 +2615,70 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             });
         })();
 
-        // Players are real YouTube embeds so a single tap starts them everywhere,
-        // including iOS Safari. The IFrame API is used for two things:
-        //   1. pause whichever video was already running
-        //   2. unmute on first play — YouTube remembers a viewer's mute preference
-        //      across visits, so a player can otherwise open silently. Only the
-        //      first play of each video is unmuted, so if the viewer chooses to
-        //      mute it afterwards that choice is left alone.
+        // Players are real YouTube embeds, so one tap starts them on every device
+        // including iOS Safari.
+        //
+        // They are wired to the IFrame API only as each card nears the viewport.
+        // Initialising all ten up front forces every iframe to load at once, which
+        // defeats loading="lazy" and makes the first videos buffer. With the
+        // observer only the cards being looked at are loaded.
         (function () {
-            var players = [], unmuted = [];
+            var players = [], unmuted = [], apiReady = false, waiting = [];
 
             var tag = document.createElement('script');
             tag.src = 'https://www.youtube.com/iframe_api';
             document.head.appendChild(tag);
 
             window.onYouTubeIframeAPIReady = function () {
-                document.querySelectorAll('iframe.client-video').forEach(function (frame, i) {
-                    players[i] = new YT.Player(frame, {
-                        events: {
-                            onStateChange: function (e) {
-                                if (e.data !== YT.PlayerState.PLAYING) return;
-
-                                if (!unmuted[i]) {
-                                    unmuted[i] = true;
-                                    try {
-                                        if (e.target.isMuted()) e.target.unMute();
-                                        if (e.target.getVolume() < 30) e.target.setVolume(100);
-                                    } catch (err) {}
-                                }
-
-                                players.forEach(function (p) {
-                                    if (p === e.target) return;
-                                    try {
-                                        if (p.getPlayerState() === YT.PlayerState.PLAYING) p.pauseVideo();
-                                    } catch (err) {}
-                                });
-                            }
-                        }
-                    });
-                });
+                apiReady = true;
+                waiting.splice(0).forEach(attach);
             };
+
+            function attach(frame) {
+                if (frame.dataset.wired) return;
+                if (!apiReady) { waiting.push(frame); return; }
+                frame.dataset.wired = '1';
+
+                var idx = players.length;
+                players[idx] = new YT.Player(frame, {
+                    events: {
+                        onStateChange: function (e) {
+                            if (e.data !== YT.PlayerState.PLAYING) return;
+
+                            // YouTube remembers a viewer's mute choice across visits,
+                            // so a player can open silently. Unmute the first play only.
+                            if (!unmuted[idx]) {
+                                unmuted[idx] = true;
+                                try {
+                                    if (e.target.isMuted()) e.target.unMute();
+                                    if (e.target.getVolume() < 30) e.target.setVolume(100);
+                                } catch (err) {}
+                            }
+
+                            players.forEach(function (p) {
+                                if (p === e.target) return;
+                                try {
+                                    if (p.getPlayerState() === YT.PlayerState.PLAYING) p.pauseVideo();
+                                } catch (err) {}
+                            });
+                        }
+                    }
+                });
+            }
+
+            var frames = document.querySelectorAll('iframe.client-video');
+            if ('IntersectionObserver' in window) {
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (!entry.isIntersecting) return;
+                        io.unobserve(entry.target);
+                        attach(entry.target);
+                    });
+                }, { rootMargin: '300px 0px' });
+                frames.forEach(function (f) { io.observe(f); });
+            } else {
+                frames.forEach(attach);
+            }
         })();
 
         // Smooth Scroll
