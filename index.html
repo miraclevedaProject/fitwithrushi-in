@@ -631,40 +631,6 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
 
 
-        /* --- click-to-play video --- */
-        .mv-player {
-            position: absolute; inset: 0;
-            cursor: pointer; background: #000;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden;
-        }
-        .mv-poster {
-            width: 100%; height: 100%;
-            object-fit: cover; display: block;
-            transition: transform .35s ease, filter .35s ease;
-        }
-        @media (hover: hover) and (pointer: fine) {
-            .mv-player:hover .mv-poster { transform: scale(1.04); filter: brightness(.8); }
-            .mv-player:hover .mv-play { transform: scale(1.1); background: #00A676; }
-        }
-        .mv-play {
-            position: absolute;
-            width: 74px; height: 74px; border-radius: 50%;
-            background: rgba(0,166,118,0.94);
-            box-shadow: 0 6px 24px rgba(0,0,0,.45);
-            transition: transform .2s ease, background .2s ease;
-        }
-        .mv-play::after {
-            content: ""; position: absolute;
-            top: 50%; left: 54%; transform: translate(-50%,-50%);
-            border-style: solid; border-width: 15px 0 15px 25px;
-            border-color: transparent transparent transparent #fff;
-        }
-        .mv-player:hover .mv-play { transform: scale(1.1); background: #00A676; }
-        .mv-player iframe,
-        .mv-player .mv-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
 
         /* Make casual saving harder: no long-press save sheet on iOS/Android,
@@ -674,8 +640,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         .transform-image img,
         .slider-item img,
         .mobile-slider-item img,
-        .about-photo img,
-        .mv-poster {
+        .about-photo img {
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -1799,10 +1764,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> JAYESH &middot; MAHARASHTRA
                 </div>
                 <div class="transform-video-wrapper">
-                    <div class="mv-player" data-vid="BSa18c9AqYM" role="button" tabindex="0" aria-label="Play Jayesh's story">
-                        <img class="mv-poster" loading="lazy" src="https://i.ytimg.com/vi/BSa18c9AqYM/hqdefault.jpg" alt="Jayesh — client story">
-                        <span class="mv-play"></span>
-                    </div>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/BSa18c9AqYM?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Jayesh — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -1814,10 +1776,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> VARDHINI &middot; TELANGANA
                 </div>
                 <div class="transform-video-wrapper">
-                    <div class="mv-player" data-vid="OrYY9OxRVIE" role="button" tabindex="0" aria-label="Play Vardhini's story">
-                        <img class="mv-poster" loading="lazy" src="https://i.ytimg.com/vi/OrYY9OxRVIE/hqdefault.jpg" alt="Vardhini — client story">
-                        <span class="mv-play"></span>
-                    </div>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/OrYY9OxRVIE?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Vardhini — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -1829,10 +1788,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> MANISH &middot; UTTAR PRADESH
                 </div>
                 <div class="transform-video-wrapper">
-                    <div class="mv-player" data-vid="RB8DhnQ8ci8" role="button" tabindex="0" aria-label="Play Manish's story">
-                        <img class="mv-poster" loading="lazy" src="https://i.ytimg.com/vi/RB8DhnQ8ci8/hqdefault.jpg" alt="Manish — client story">
-                        <span class="mv-play"></span>
-                    </div>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/RB8DhnQ8ci8?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Manish — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -1844,10 +1800,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> DIYASHA &middot; WEST BENGAL
                 </div>
                 <div class="transform-video-wrapper">
-                    <div class="mv-player" data-vid="DjLIlmFPMnk" role="button" tabindex="0" aria-label="Play Diyasha's story">
-                        <img class="mv-poster" loading="lazy" src="https://i.ytimg.com/vi/DjLIlmFPMnk/hqdefault.jpg" alt="Diyasha — client story">
-                        <span class="mv-play"></span>
-                    </div>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/DjLIlmFPMnk?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Diyasha — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -1859,10 +1812,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> SOUNDARYA &middot; KARNATAKA
                 </div>
                 <div class="transform-video-wrapper">
-                    <div class="mv-player" data-vid="tNoES2HH1-I" role="button" tabindex="0" aria-label="Play Soundarya's story">
-                        <img class="mv-poster" loading="lazy" src="https://i.ytimg.com/vi/tNoES2HH1-I/hqdefault.jpg" alt="Soundarya — client story">
-                        <span class="mv-play"></span>
-                    </div>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/tNoES2HH1-I?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Soundarya — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -1874,10 +1824,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> SUBHADIP &middot; WEST BENGAL
                 </div>
                 <div class="transform-video-wrapper">
-                    <div class="mv-player" data-vid="WXWV4CTwQyc" role="button" tabindex="0" aria-label="Play Subhadip's story">
-                        <img class="mv-poster" loading="lazy" src="https://i.ytimg.com/vi/WXWV4CTwQyc/hqdefault.jpg" alt="Subhadip — client story">
-                        <span class="mv-play"></span>
-                    </div>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/WXWV4CTwQyc?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Subhadip — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -1889,10 +1836,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> ZAINAB &middot; DELHI
                 </div>
                 <div class="transform-video-wrapper">
-                    <div class="mv-player" data-vid="M2WIlC-CCrc" role="button" tabindex="0" aria-label="Play Zainab's story">
-                        <img class="mv-poster" loading="lazy" src="https://i.ytimg.com/vi/M2WIlC-CCrc/hqdefault.jpg" alt="Zainab — client story">
-                        <span class="mv-play"></span>
-                    </div>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/M2WIlC-CCrc?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Zainab — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -1904,10 +1848,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> NIKITHA &middot; KARNATAKA
                 </div>
                 <div class="transform-video-wrapper">
-                    <div class="mv-player" data-vid="tvbiFDLcodU" role="button" tabindex="0" aria-label="Play Nikitha's story">
-                        <img class="mv-poster" loading="lazy" src="https://i.ytimg.com/vi/tvbiFDLcodU/hqdefault.jpg" alt="Nikitha — client story">
-                        <span class="mv-play"></span>
-                    </div>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/tvbiFDLcodU?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Nikitha — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -1919,10 +1860,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> MAMALI &middot; ODISHA
                 </div>
                 <div class="transform-video-wrapper">
-                    <div class="mv-player" data-vid="oKyYymV0IyY" role="button" tabindex="0" aria-label="Play Mamali's story">
-                        <img class="mv-poster" loading="lazy" src="https://i.ytimg.com/vi/oKyYymV0IyY/hqdefault.jpg" alt="Mamali — client story">
-                        <span class="mv-play"></span>
-                    </div>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/oKyYymV0IyY?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Mamali — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -1934,10 +1872,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     <i class="fas fa-user-circle"></i> KHUMAN DHARA &middot; GUJARAT
                 </div>
                 <div class="transform-video-wrapper">
-                    <div class="mv-player" data-vid="R0QWdEIMRHM" role="button" tabindex="0" aria-label="Play Khuman Dhara's story">
-                        <img class="mv-poster" loading="lazy" src="https://i.ytimg.com/vi/R0QWdEIMRHM/hqdefault.jpg" alt="Khuman Dhara — client story">
-                        <span class="mv-play"></span>
-                    </div>
+                    <iframe class="client-video" loading="lazy" src="https://www.youtube.com/embed/R0QWdEIMRHM?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;disablekb=1&amp;fs=1&amp;enablejsapi=1" title="Khuman Dhara — Miracle Veda client story" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
@@ -2669,7 +2604,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
         // Block right-click / long-press / drag on client media.
         (function () {
-            var guarded = '.transform-image, .slider-item, .mobile-slider-item, .mv-player, .about-photo';
+            var guarded = '.transform-image, .slider-item, .mobile-slider-item, .about-photo';
             document.addEventListener('contextmenu', function (e) {
                 if (e.target.closest && e.target.closest(guarded)) e.preventDefault();
             });
@@ -2678,64 +2613,33 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             });
         })();
 
-        // One tap plays, with sound, on every device.
-        //
-        // The iframe is created with mute=1 because MUTED autoplay is the only kind
-        // browsers never block — that is what removes the second tap on iPhone.
-        // It is unmuted over postMessage a moment later, which is allowed because
-        // the tap that created the player counts as the user gesture.
-        //
-        // Only 'click' is used: pointerdown/touchstart also fire when a scroll
-        // begins, which was starting videos while the page was being scrolled.
+        // Players are real YouTube embeds so a single tap starts them everywhere,
+        // including iOS Safari. The IFrame API is used only to pause whichever
+        // video was already running when a new one is started.
         (function () {
-            var PARAMS = 'autoplay=1&mute=1&playsinline=1&enablejsapi=1&rel=0' +
-                         '&controls=1&modestbranding=1&iv_load_policy=3&disablekb=1&fs=1';
+            var players = [];
 
-            function post(frame, func) {
-                try {
-                    frame.contentWindow.postMessage(JSON.stringify(
-                        { event: 'command', func: func, args: [] }), '*');
-                } catch (e) {}
-            }
+            var tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            document.head.appendChild(tag);
 
-            function reset(el) {
-                var f = el.querySelector('iframe');
-                if (f) f.remove();
-                el.querySelector('.mv-poster').style.display = '';
-                el.querySelector('.mv-play').style.display = '';
-            }
-
-            function play(el) {
-                if (el.querySelector('iframe')) return;
-
-                document.querySelectorAll('.mv-player').forEach(function (other) {
-                    if (other !== el) reset(other);
+            window.onYouTubeIframeAPIReady = function () {
+                document.querySelectorAll('iframe.client-video').forEach(function (frame, i) {
+                    players[i] = new YT.Player(frame, {
+                        events: {
+                            onStateChange: function (e) {
+                                if (e.data !== YT.PlayerState.PLAYING) return;
+                                players.forEach(function (p) {
+                                    if (p === e.target) return;
+                                    try {
+                                        if (p.getPlayerState() === YT.PlayerState.PLAYING) p.pauseVideo();
+                                    } catch (err) {}
+                                });
+                            }
+                        }
+                    });
                 });
-
-                var f = document.createElement('iframe');
-                f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
-                f.setAttribute('allowfullscreen', '');
-                f.setAttribute('frameborder', '0');
-                f.setAttribute('title', el.getAttribute('aria-label') || 'Client story');
-                f.src = 'https://www.youtube.com/embed/' + el.dataset.vid + '?' + PARAMS;
-                el.appendChild(f);
-
-                el.querySelector('.mv-poster').style.display = 'none';
-                el.querySelector('.mv-play').style.display = 'none';
-
-                // turn the sound on once the player has had a moment to start
-                f.addEventListener('load', function () {
-                    setTimeout(function () { post(f, 'unMute'); }, 350);
-                    setTimeout(function () { post(f, 'unMute'); }, 1200);
-                });
-            }
-
-            document.querySelectorAll('.mv-player').forEach(function (el) {
-                el.addEventListener('click', function () { play(el); });
-                el.addEventListener('keydown', function (ev) {
-                    if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); play(el); }
-                });
-            });
+            };
         })();
 
         // Smooth Scroll
