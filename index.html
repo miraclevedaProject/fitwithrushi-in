@@ -246,7 +246,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         }
 
         .sub-headline .highlight {
-            color: var(--cta-green);
+            color: #00C98C;
         }
 
         .sub-headline .gold {
@@ -267,26 +267,36 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         }
 
         .pill {
-            background: var(--primary-bg);
-            padding: 8px 16px;
+            padding: 11px 22px;
             border-radius: 50px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 9px;
             font-size: 0.9rem;
-            font-weight: 600;
-            border: 2px solid #333;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            border: none;
             white-space: nowrap;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .pill.negative {
-            color: #FF6B6B;
-            border-color: #FF6B6B;
+            background: #16241D;
+            color: #C9D6CD;
+        }
+
+        .pill.negative .icon {
+            color: #FF7A7A;
         }
 
         .pill.positive {
-            color: var(--cta-green);
-            border-color: var(--cta-green);
+            background: var(--cta-green);
+            color: #FFFFFF;
+            box-shadow: 0 3px 14px rgba(0, 166, 118, 0.35);
+        }
+
+        .pill.positive .icon {
+            color: #FFFFFF;
         }
 
         .pill .icon {
