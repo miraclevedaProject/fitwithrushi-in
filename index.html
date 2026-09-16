@@ -635,6 +635,8 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         .mv-player {
             position: absolute; inset: 0;
             cursor: pointer; background: #000;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden;
         }
@@ -643,7 +645,10 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             object-fit: cover; display: block;
             transition: transform .35s ease, filter .35s ease;
         }
-        .mv-player:hover .mv-poster { transform: scale(1.04); filter: brightness(.8); }
+        @media (hover: hover) and (pointer: fine) {
+            .mv-player:hover .mv-poster { transform: scale(1.04); filter: brightness(.8); }
+            .mv-player:hover .mv-play { transform: scale(1.1); background: #00A676; }
+        }
         .mv-play {
             position: absolute;
             width: 74px; height: 74px; border-radius: 50%;
@@ -2751,7 +2756,18 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             }
 
             document.querySelectorAll('.mv-player').forEach(function (el) {
-                el.addEventListener('click', function () { onTap(el); });
+                var fired = false;
+                function handle(ev) {
+                    if (fired) return;          // pointerdown and click both arrive; take the first
+                    fired = true;
+                    setTimeout(function () { fired = false; }, 600);
+                    ev.preventDefault();
+                    onTap(el);
+                }
+                // pointerdown fires on the very first touch, with no hover step in between
+                if (window.PointerEvent) el.addEventListener('pointerdown', handle);
+                else el.addEventListener('touchstart', handle, { passive: false });
+                el.addEventListener('click', handle);
                 el.addEventListener('keydown', function (ev) {
                     if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); onTap(el); }
                 });
