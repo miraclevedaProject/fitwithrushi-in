@@ -2710,6 +2710,12 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                 players[idx] = new YT.Player(frame, {
                     events: {
                         onStateChange: function (e) {
+                            // Clips under a minute count as Shorts and YouTube
+                            // replays them on a loop. Stop at the end instead.
+                            if (e.data === YT.PlayerState.ENDED) {
+                                try { e.target.stopVideo(); } catch (err) {}
+                                return;
+                            }
                             if (e.data !== YT.PlayerState.PLAYING) return;
 
                             // YouTube remembers a viewer's mute choice across visits,
