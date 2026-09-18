@@ -806,7 +806,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             justify-content: center;
             flex-wrap: wrap;
             gap: 9px;
-            margin: 22px 0;               /* equal space above and below the CTA */
+            margin: 22px auto;            /* auto keeps the box centred on desktop */
         }
         .avatar-row { display: flex; align-items: center; }
         .avatar-row img {
@@ -1092,13 +1092,16 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         }
 
         .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 18px;
             margin-top: 18px;
         }
 
         .stat-item {
+            flex: 1 1 230px;
+            max-width: 290px;
             background: rgba(255,255,255,0.1);
             padding: 18px;
             border-radius: 10px;
