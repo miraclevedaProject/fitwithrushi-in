@@ -607,9 +607,9 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
         .client-transformation-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 28px;
-            margin: 28px 0;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+            margin: 20px 0;
         }
 
         .client-transformation-card {
@@ -1039,6 +1039,16 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         @media (max-width: 768px) {
             .auto-slider .slider-item { width: 190px; height: 190px; }
             .auto-track { gap: 10px; }
+        }
+
+
+        @media (max-width: 768px) {
+            /* the heading block above the transformation grid was taking most of
+               a screen on its own before a single card showed */
+            .section-title { font-size: 1.32rem; line-height: 1.24; margin-bottom: 8px; }
+            .section-subtitle { font-size: 0.83rem; line-height: 1.4; }
+            .section-black, .section-white { padding: 26px 0; }
+            .mini-video-grid { max-width: 100%; }
         }
 
         .manual-slider-container {
@@ -1978,8 +1988,18 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             }
 
             .client-transformation-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin: 14px 0;
             }
+            .client-transformation-card { border-width: 1.5px; border-radius: 8px; }
+            .client-name-tag {
+                padding: 6px 6px;
+                font-size: 0.62rem;
+                letter-spacing: 0.2px;
+                line-height: 1.2;
+            }
+            .client-name-tag i { display: none; }
 
             .pricing-grid {
                 grid-template-columns: 1fr;
