@@ -999,6 +999,48 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             background: #000;
         }
 
+
+        /* --- two auto-scrolling transformation rows --- */
+        .auto-slider {
+            overflow: hidden;
+            position: relative;
+            margin: 14px 0;
+            cursor: grab;
+            -webkit-overflow-scrolling: touch;
+        }
+        .auto-slider.dragging { cursor: grabbing; }
+        .auto-track {
+            display: flex;
+            gap: 14px;
+            width: max-content;
+            will-change: transform;
+        }
+        .auto-slider .slider-item {
+            width: 250px;
+            height: 250px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--cta-green);
+            background: #1A1A1A;
+        }
+        .auto-slider .slider-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            /* stop long-press save, drag-out and right-click grabs */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            pointer-events: none;
+        }
+        @media (max-width: 768px) {
+            .auto-slider .slider-item { width: 190px; height: 190px; }
+            .auto-track { gap: 10px; }
+        }
+
         .manual-slider-container {
             overflow-x: auto;
             overflow-y: hidden;
@@ -2253,22 +2295,13 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             <h2 class="section-title">MORE <span class="green">BEFORE &#038; AFTER</span> SUCCESS STORIES</h2>
             <p class="section-subtitle">Swipe to see more real client transformations</p>
             
-            <div class="manual-slider-container">
-                <div class="manual-slider-wrapper">
-                    <div class="slider-item"><img decoding="async" src="" alt="Before After 1"></div>
-<div class="slider-item"><img decoding="async" src="" alt="Before After 2"></div>
-<div class="slider-item"><img decoding="async" src="" alt="Before After 3"></div>
-<div class="slider-item"><img decoding="async" src="" alt="Before After 4"></div>
-<div class="slider-item"><img decoding="async" src="" alt="Before After 5"></div>
-<div class="slider-item"><img decoding="async" src="" alt="Before After 6"></div>
-<div class="slider-item"><img decoding="async" src="" alt="Before After 7"></div>
-<div class="slider-item"><img decoding="async" src="" alt="Before After 8"></div>
-<div class="slider-item"><img decoding="async" src="" alt="Before After 9"></div>
-<div class="slider-item"><img decoding="async" src="" alt="Before After 10"></div>
-<div class="slider-item"><img decoding="async" src="" alt="Before After 11"></div>
-<div class="slider-item"><img decoding="async" src="" alt="Before After 12"></div>
+                <div class="auto-slider dir-left">
+                    <div class="auto-track"><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba01.jpg" alt="Client transformation 1"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba02.jpg" alt="Client transformation 2"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba03.jpg" alt="Client transformation 3"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba04.jpg" alt="Client transformation 4"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba05.jpg" alt="Client transformation 5"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba06.jpg" alt="Client transformation 6"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba07.jpg" alt="Client transformation 7"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba08.jpg" alt="Client transformation 8"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba09.jpg" alt="Client transformation 9"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba01.jpg" alt="Client transformation 1"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba02.jpg" alt="Client transformation 2"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba03.jpg" alt="Client transformation 3"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba04.jpg" alt="Client transformation 4"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba05.jpg" alt="Client transformation 5"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba06.jpg" alt="Client transformation 6"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba07.jpg" alt="Client transformation 7"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba08.jpg" alt="Client transformation 8"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba09.jpg" alt="Client transformation 9"></div></div>
                 </div>
-            </div>
+                <div class="auto-slider dir-right">
+                    <div class="auto-track"><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba10.jpg" alt="Client transformation 10"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba11.jpg" alt="Client transformation 11"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba12.jpg" alt="Client transformation 12"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba13.jpg" alt="Client transformation 13"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba14.jpg" alt="Client transformation 14"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba15.jpg" alt="Client transformation 15"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba16.jpg" alt="Client transformation 16"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba17.jpg" alt="Client transformation 17"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba18.jpg" alt="Client transformation 18"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba10.jpg" alt="Client transformation 10"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba11.jpg" alt="Client transformation 11"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba12.jpg" alt="Client transformation 12"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba13.jpg" alt="Client transformation 13"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba14.jpg" alt="Client transformation 14"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba15.jpg" alt="Client transformation 15"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba16.jpg" alt="Client transformation 16"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba17.jpg" alt="Client transformation 17"></div><div class="slider-item"><img loading="lazy" decoding="async" draggable="false" src="wp-content/uploads/beforeafter/ba18.jpg" alt="Client transformation 18"></div></div>
+                </div>
+
         </div>
     </section>
 
@@ -3005,6 +3038,79 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             });
             document.addEventListener('dragstart', function (e) {
                 if (e.target.tagName === 'IMG') e.preventDefault();
+            });
+        })();
+
+        // Two rows drifting in opposite directions. They pause the moment a
+        // finger or cursor lands on them, can be dragged by hand, and pick the
+        // drift back up on release — so nothing runs away while someone reads.
+        (function () {
+            document.querySelectorAll('.auto-slider').forEach(function (box) {
+                var track = box.querySelector('.auto-track');
+                if (!track) return;
+
+                var dir = box.classList.contains('dir-right') ? -1 : 1;
+                var speed = 0.35;                 // px per frame
+                var half = 0;
+                var pos = 0;
+                var held = false;
+                var startX = 0, startPos = 0, moved = false;
+
+                function measure() {
+                    half = track.scrollWidth / 2;  // the list is duplicated once
+                    if (dir === -1 && pos === 0) pos = half;
+                }
+                measure();
+                window.addEventListener('resize', measure);
+                window.addEventListener('load', measure);
+
+                function wrap() {
+                    if (!half) return;
+                    if (pos >= half) pos -= half;
+                    if (pos < 0) pos += half;
+                }
+
+                function frame() {
+                    if (!held && half) {
+                        pos += speed * dir;
+                        wrap();
+                        track.style.transform = 'translateX(' + (-pos) + 'px)';
+                    }
+                    requestAnimationFrame(frame);
+                }
+                requestAnimationFrame(frame);
+
+                function down(x) {
+                    held = true; moved = false;
+                    startX = x; startPos = pos;
+                    box.classList.add('dragging');
+                }
+                function move(x) {
+                    if (!held) return;
+                    var dx = x - startX;
+                    if (Math.abs(dx) > 3) moved = true;
+                    pos = startPos - dx;
+                    wrap();
+                    track.style.transform = 'translateX(' + (-pos) + 'px)';
+                }
+                function up() {
+                    held = false;
+                    box.classList.remove('dragging');
+                }
+
+                box.addEventListener('mouseenter', function () { held = true; });
+                box.addEventListener('mouseleave', function () { held = false; box.classList.remove('dragging'); });
+                box.addEventListener('mousedown', function (e) { down(e.clientX); e.preventDefault(); });
+                window.addEventListener('mousemove', function (e) { move(e.clientX); });
+                window.addEventListener('mouseup', up);
+
+                box.addEventListener('touchstart', function (e) { down(e.touches[0].clientX); }, { passive: true });
+                box.addEventListener('touchmove', function (e) {
+                    move(e.touches[0].clientX);
+                    if (moved) e.preventDefault();          // horizontal drag, not a page scroll
+                }, { passive: false });
+                box.addEventListener('touchend', up);
+                box.addEventListener('touchcancel', up);
             });
         })();
 
