@@ -127,6 +127,15 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 /*# sourceURL=global-styles-inline-css */
 </style>
 
+    <script>
+    // Browsers restore the old scroll position on reload, but this page grows as
+    // lazy images arrive, so the remembered offset lands somewhere unrelated.
+    // Start at the top instead — unless the URL points at a section.
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('load', function () {
+        if (!location.hash) window.scrollTo(0, 0);
+    });
+    </script>
 </head>
 
 	<body class="wp-singular page-template page-template-blank-slate-template page-template-blank-slate-template-php page page-id-607 wp-theme-intentionally-blank blank-slate fl-builder-lite-2-10-3-2 fl-no-js">
