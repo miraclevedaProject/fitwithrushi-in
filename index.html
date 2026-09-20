@@ -1097,6 +1097,33 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             .video-wrapper .vplay-btn::after { border-width: 11px 0 11px 18px; }
         }
 
+
+        /* WhatsApp screenshots are tall phone captures, so this row gets its own
+           9:16 tile size while sharing the same drift-and-drag behaviour. */
+        .auto-slider.shots .shot-item {
+            width: 250px;
+            height: 445px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--cta-green);
+            background: #1A1A1A;
+        }
+        .auto-slider.shots .shot-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            pointer-events: none;
+        }
+        @media (max-width: 768px) {
+            .auto-slider.shots .shot-item { width: 190px; height: 338px; }
+        }
+
         .manual-slider-container {
             overflow-x: auto;
             overflow-y: hidden;
@@ -2367,29 +2394,8 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             <h2 class="section-title">3,700+ BUSY INDIANS <span class="green">TRANSFORMED</span> WITH THIS SYSTEM</h2>
             <p class="section-subtitle">Their results say everything.</p>
             
-            <div class="mobile-slider-container">
-                <div class="mobile-slider-wrapper">
-                    <div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 1"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 2"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 3"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 4"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 5"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 6"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 7"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 8"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 9"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 10"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 11"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 12"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 13"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 14"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 15"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 16"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 17"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 18"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 19"></div>
-<div class="mobile-slider-item"><img decoding="async" src="" alt="Mobile Screenshot 20"></div>
-                </div>
+            <div class="auto-slider shots dir-left">
+                <div class="auto-track"><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 1"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 2"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 3"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 4"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 5"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 6"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 7"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 8"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 9"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 10"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 11"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 12"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 13"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 14"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 15"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 16"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 17"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 18"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 19"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 20"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 1"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 2"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 3"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 4"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 5"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 6"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 7"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 8"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 9"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 10"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 11"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 12"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 13"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 14"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 15"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 16"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 17"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 18"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 19"></div><div class="shot-item"><img loading="lazy" decoding="async" draggable="false" src="" alt="Client WhatsApp feedback 20"></div></div>
             </div>
 
             <div class="stats-box">
