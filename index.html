@@ -3050,23 +3050,28 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             });
         })();
 
-        // Two rows drifting in opposite directions. They pause the moment a
-        // finger or cursor lands on them, can be dragged by hand, and pick the
-        // drift back up on release — so nothing runs away while someone reads.
+        // Rows drifting in opposite directions.
+        //
+        // They only stop while a pointer is actually held down on them — simply
+        // moving the cursor across while scrolling the page no longer freezes a
+        // row, which was making the page feel stuck. A press has to travel a few
+        // pixels before it counts as a drag, so a plain click does not nudge the
+        // row either.
         (function () {
+            var DRAG_THRESHOLD = 5;   // px before a press becomes a drag
+
             document.querySelectorAll('.auto-slider').forEach(function (box) {
                 var track = box.querySelector('.auto-track');
                 if (!track) return;
 
                 var dir = box.classList.contains('dir-right') ? -1 : 1;
-                var speed = 0.40;                 // px per frame
-                var half = 0;
-                var pos = 0;
-                var held = false;
-                var startX = 0, startPos = 0, moved = false;
+                var speed = 0.40;
+                var half = 0, pos = 0;
+                var held = false, dragging = false;
+                var startX = 0, startPos = 0;
 
                 function measure() {
-                    half = track.scrollWidth / 2;  // the list is duplicated once
+                    half = track.scrollWidth / 2;   // the list is duplicated once
                     if (dir === -1 && pos === 0) pos = half;
                 }
                 measure();
@@ -3079,44 +3084,42 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     if (pos < 0) pos += half;
                 }
 
-                function frame() {
-                    if (!held && half) {
-                        pos += speed * dir;
-                        wrap();
-                        track.style.transform = 'translateX(' + (-pos) + 'px)';
-                    }
-                    requestAnimationFrame(frame);
+                function paint() {
+                    track.style.transform = 'translateX(' + (-pos) + 'px)';
                 }
-                requestAnimationFrame(frame);
+
+                (function frame() {
+                    if (!held && half) { pos += speed * dir; wrap(); paint(); }
+                    requestAnimationFrame(frame);
+                })();
 
                 function down(x) {
-                    held = true; moved = false;
+                    held = true; dragging = false;
                     startX = x; startPos = pos;
-                    box.classList.add('dragging');
                 }
                 function move(x) {
                     if (!held) return;
                     var dx = x - startX;
-                    if (Math.abs(dx) > 3) moved = true;
+                    if (!dragging && Math.abs(dx) < DRAG_THRESHOLD) return;
+                    dragging = true;
+                    box.classList.add('dragging');
                     pos = startPos - dx;
-                    wrap();
-                    track.style.transform = 'translateX(' + (-pos) + 'px)';
+                    wrap(); paint();
                 }
                 function up() {
-                    held = false;
+                    held = false; dragging = false;
                     box.classList.remove('dragging');
                 }
 
-                box.addEventListener('mouseenter', function () { held = true; });
-                box.addEventListener('mouseleave', function () { held = false; box.classList.remove('dragging'); });
                 box.addEventListener('mousedown', function (e) { down(e.clientX); e.preventDefault(); });
                 window.addEventListener('mousemove', function (e) { move(e.clientX); });
                 window.addEventListener('mouseup', up);
+                window.addEventListener('blur', up);
 
                 box.addEventListener('touchstart', function (e) { down(e.touches[0].clientX); }, { passive: true });
                 box.addEventListener('touchmove', function (e) {
                     move(e.touches[0].clientX);
-                    if (moved) e.preventDefault();          // horizontal drag, not a page scroll
+                    if (dragging) e.preventDefault();   // horizontal drag, not a page scroll
                 }, { passive: false });
                 box.addEventListener('touchend', up);
                 box.addEventListener('touchcancel', up);
