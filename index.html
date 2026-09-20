@@ -310,16 +310,34 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         .hero-badge {
             background: var(--cta-green);
             color: var(--primary-text);
-            padding: 12px 28px;
+            padding: 11px 24px;
             border-radius: 8px;
             display: inline-block;
-            margin: 18px 0;
-            font-size: 1rem;
-            font-weight: 700;
+            margin: 16px 0;
             box-shadow: var(--shadow-md);
-            animation: pulse 2s infinite;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
+            line-height: 1.35;
+        }
+
+        .hero-badge .badge-l1,
+        .hero-badge .badge-l2 {
+            display: block;
+        }
+        .hero-badge .badge-l1 {
+            font-size: 0.95rem;
+            font-weight: 800;
+        }
+        .hero-badge .badge-l2 {
+            font-size: 0.82rem;
+            font-weight: 600;
+            opacity: 0.92;
+            margin-top: 2px;
+        }
+        @media (max-width: 768px) {
+            .hero-badge { padding: 10px 14px; margin: 13px 0; }
+            .hero-badge .badge-l1 { font-size: 0.8rem; }
+            .hero-badge .badge-l2 { font-size: 0.7rem; }
         }
 
         .video-section {
@@ -2083,13 +2101,14 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                 </div>
 
                 <div class="hero-badge">
-                    ⭐ DESIGNED FOR BUSY PROFESSIONALS, PCOS/PCOD &#038; THYROID PATIENTS
+                    <span class="badge-l1">DESIGNED FOR BUSY PROFESSIONALS</span>
+                    <span class="badge-l2">PMOS (FORMERLY PCOS) &middot; PCOD &middot; THYROID</span>
                 </div>
 
                 <div class="video-section">
                     <div class="video-wrapper">
                         <!-- Line ~290 -->
-<iframe id="mainVideo" src="" allowfullscreen></iframe>
+<iframe id="mainVideo" loading="lazy" src="https://www.youtube.com/embed/_BIQEIOlt_c?rel=0&amp;controls=1&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1&amp;fs=1" title="How my fat loss program works — Miracle Veda" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     </div>
                     <p class="video-caption">Watch: Full program walkthrough – exactly how this system works.</p>
                 </div>
