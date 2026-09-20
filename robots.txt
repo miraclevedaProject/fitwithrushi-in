@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /thank-you/
 
-Sitemap: https://miracleveda.pages.dev/sitemap.xml
+Sitemap: https://miracleveda.com/sitemap.xml
