@@ -366,11 +366,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             border: 2px solid var(--cta-green);
         }
 
-        .video-wrapper iframe {
-            width: 100%;
-            height: 360px;
-            border: none;
-        }
+
 
         .video-caption {
             margin-top: 12px;
@@ -1083,6 +1079,13 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
         /* the hero clip is landscape, unlike the 9:16 client stories */
         .video-wrapper .vplay { border-radius: 10px; }
+        .video-wrapper iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
         .video-wrapper .vposter { object-fit: cover; background: #000; }
         @media (max-width: 768px) {
             .video-wrapper { padding-bottom: 56.25%; }   /* full-width 16:9 on phones */
@@ -1992,9 +1995,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                 font-size: 1.6rem;
             }
 
-            .video-wrapper iframe {
-                height: 260px;
-            }
+
 
             .section-title {
                 font-size: 1.7rem;
