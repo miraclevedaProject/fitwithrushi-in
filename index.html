@@ -315,9 +315,12 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             display: inline-block;
             margin: 16px 0;
             box-shadow: var(--shadow-md);
+            font-size: 1.18rem;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.4px;
             line-height: 1.35;
+            max-width: 640px;
             position: relative;
             overflow: hidden;
         }
@@ -339,24 +342,8 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             .hero-badge::after { animation: none; display: none; }
         }
 
-        .hero-badge .badge-l1,
-        .hero-badge .badge-l2 {
-            display: block;
-        }
-        .hero-badge .badge-l1 {
-            font-size: 1.12rem;
-            font-weight: 800;
-        }
-        .hero-badge .badge-l2 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            opacity: 0.92;
-            margin-top: 2px;
-        }
         @media (max-width: 768px) {
-            .hero-badge { padding: 10px 14px; margin: 13px 0; }
-            .hero-badge .badge-l1 { font-size: 0.92rem; }
-            .hero-badge .badge-l2 { font-size: 0.78rem; }
+            .hero-badge { padding: 11px 16px; margin: 14px 0; font-size: 0.86rem; }
         }
 
         .video-section {
@@ -370,7 +357,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             position: relative;
             width: 100%;
             height: 0;
-            padding-bottom: 37.125%;      /* 16:9 of the 660px cap */
+            padding-bottom: 56.25%;       /* true 16:9 */
             background: #000;
             border-radius: 10px;
             overflow: hidden;
@@ -1096,7 +1083,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
         /* the hero clip is landscape, unlike the 9:16 client stories */
         .video-wrapper .vplay { border-radius: 10px; }
-        .video-wrapper .vposter { object-fit: contain; background: #000; }
+        .video-wrapper .vposter { object-fit: cover; background: #000; }
         @media (max-width: 768px) {
             .video-wrapper { padding-bottom: 56.25%; }   /* full-width 16:9 on phones */
             .video-wrapper .vplay-btn { width: 52px; height: 52px; }
@@ -2135,8 +2122,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                 </div>
 
                 <div class="hero-badge">
-                    <span class="badge-l1">DESIGNED FOR BUSY PROFESSIONALS</span>
-                    <span class="badge-l2">PMOS (FORMERLY PCOS) &middot; PCOD &middot; THYROID</span>
+                    ⭐ DESIGNED FOR BUSY PROFESSIONALS, PCOS/PCOD &#038; THYROID PATIENTS
                 </div>
 
                 <div class="video-section">
