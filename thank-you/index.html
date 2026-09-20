@@ -495,5 +495,43 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         }
     });
 </script>
+
+    <script>
+    // Keep whatever has been typed so far, per order. Someone who closes the
+    // tab halfway and comes back through the email link gets their answers
+    // restored instead of starting over. Cleared once the form is submitted.
+    (function () {
+        var form = document.getElementById('dietForm');
+        if (!form) return;
+        var order = new URLSearchParams(location.search).get('order') || 'noorder';
+        var KEY = 'mv_draft_' + order;
+
+        try {
+            var saved = JSON.parse(localStorage.getItem(KEY) || '{}');
+            Object.keys(saved).forEach(function (name) {
+                var el = form.elements[name];
+                if (el && !el.value) el.value = saved[name];
+            });
+        } catch (e) {}
+
+        var timer;
+        form.addEventListener('input', function () {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                try {
+                    var d = {};
+                    new FormData(form).forEach(function (v, k) {
+                        if (typeof v === 'string' && v) d[k] = v;
+                    });
+                    localStorage.setItem(KEY, JSON.stringify(d));
+                } catch (e) {}
+            }, 400);
+        });
+
+        form.addEventListener('submit', function () {
+            try { localStorage.removeItem(KEY); } catch (e) {}
+        });
+    })();
+    </script>
 </body>
 </html>
