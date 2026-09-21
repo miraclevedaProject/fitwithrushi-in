@@ -3364,7 +3364,12 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     btn.classList.add('playing');
                     btn.appendChild(makeFrame(btn.dataset.vid, btn.getAttribute('aria-label'), false));
                     requestApi();
-                    if (apiReady) wire(btn); else waiting.push(btn);
+                    // hand the player to YouTube's API only once its frame has
+                    // loaded — wiring it earlier made the API message a frame
+                    // that was not ready yet
+                    var fr = btn.querySelector('iframe');
+                    var go = function () { if (apiReady) wire(btn); else waiting.push(btn); };
+                    if (fr) fr.addEventListener('load', go, { once: true }); else go();
                 }
 
                 if ('IntersectionObserver' in window) {
