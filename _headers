@@ -3,6 +3,11 @@
 /wp-content/uploads/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
-# Pages: always check for a fresh copy, so edits go live immediately
+# Every page: no one may show this site inside a frame on their own domain
+# (the usual trick for passing a copied site off as the real one), and the
+# browser must not guess file types.
 /*
   X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: frame-ancestors 'self'
+  Referrer-Policy: strict-origin-when-cross-origin
