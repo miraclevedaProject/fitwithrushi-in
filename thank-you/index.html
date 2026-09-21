@@ -531,6 +531,9 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     });
 
     function showSuccess() {
+        // stop the autosave from writing the answers back after they are sent
+        window.__mvSubmitted = true;
+        try { localStorage.removeItem('mv_draft_' + (params.get('order') || 'noorder')); } catch (e) {}
         document.getElementById('formCard').style.display = 'none';
         const badge = document.querySelector('.success-badge');
         if (badge) badge.style.display = 'none';
@@ -606,6 +609,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         form.addEventListener('input', function () {
             clearTimeout(timer);
             timer = setTimeout(function () {
+                if (window.__mvSubmitted) return;
                 try {
                     var d = {};
                     new FormData(form).forEach(function (v, k) {
