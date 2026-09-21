@@ -189,6 +189,10 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     }
     #formBanner.banner-err { background: #E53935; color: #fff; }
     #formBanner.banner-ok  { background: #00A676; color: #fff; }
+
+    .file-list { margin-top: 8px; }
+    .file-row { font: 500 13px/1.5 Arial, Helvetica, sans-serif; color: #00C98C; word-break: break-all; }
+    .file-row.bad { color: #FF6B6B; }
 </style>
 </head>
 <body>
@@ -279,8 +283,9 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             <input name="medications" required>
 
             <label style="margin-top:16px;">Upload blood reports (optional)</label>
-            <input type="file" name="blood_report" accept="image/*,.pdf">
-            <div class="file-hint">Photo or PDF of recent reports, if you have them</div>
+            <input type="file" name="blood_report" id="f_reports" accept="image/*,.pdf,application/pdf" multiple>
+            <div class="file-hint">Photos or PDFs of recent reports — you can pick more than one (up to 5 files, 10 MB each)</div>
+            <div id="fileList" class="file-list"></div>
 
             <h4>Food Allergies</h4>
             <input name="allergies" placeholder="e.g. dairy, gluten, nuts">
@@ -417,6 +422,40 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         });
     });
 
+
+    // ---------- report files ----------
+    (function () {
+        var input = document.getElementById('f_reports');
+        var list = document.getElementById('fileList');
+        if (!input) return;
+        var MAX = 10 * 1024 * 1024, MAX_FILES = 5;
+        function ok(f) {
+            return /^image\//.test(f.type) || f.type === 'application/pdf' || /\.pdf$/i.test(f.name);
+        }
+        window.__reportProblem = function () {
+            var files = Array.prototype.slice.call(input.files || []);
+            if (files.length > MAX_FILES) return 'Please choose up to ' + MAX_FILES + ' report files.';
+            for (var i = 0; i < files.length; i++) {
+                if (!ok(files[i])) return '"' + files[i].name + '" is not a photo or PDF.';
+                if (files[i].size > MAX) return '"' + files[i].name + '" is larger than 10 MB. Please send a smaller file, or share it on WhatsApp.';
+            }
+            return '';
+        };
+        input.addEventListener('change', function () {
+            var files = Array.prototype.slice.call(input.files || []);
+            list.innerHTML = '';
+            files.forEach(function (f) {
+                var row = document.createElement('div');
+                var bad = !ok(f) || f.size > MAX;
+                row.className = bad ? 'file-row bad' : 'file-row';
+                row.textContent = (bad ? '\u2716 ' : '\u2714 ') + f.name + ' \u00B7 ' + (f.size / 1048576).toFixed(1) + ' MB';
+                list.appendChild(row);
+            });
+            var p = window.__reportProblem();
+            if (p) showBanner(p, 'err');
+        });
+    })();
+
     // ---------- validation ----------
     // The browser's own required-field bubble is unreliable on phones (on iOS it
     // often never shows, so the tap looked dead). We validate ourselves: every
@@ -479,6 +518,13 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     function validateForm() {
         const missing = findMissing();
         if (missing.length) { reportMissing(missing); return false; }
+        const fileProblem = window.__reportProblem ? window.__reportProblem() : '';
+        if (fileProblem) {
+            showBanner(fileProblem, 'err');
+            const fi = document.getElementById('f_reports');
+            if (fi) fi.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return false;
+        }
         return true;
     }
 
