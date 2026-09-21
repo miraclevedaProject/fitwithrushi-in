@@ -177,6 +177,18 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     .modal-btn { width: 100%; padding: 13px; border-radius: 8px; border: none; font-weight: 700; font-size: 0.95rem; cursor: pointer; margin-bottom: 10px; font-family: 'Montserrat', sans-serif; }
     .modal-btn.confirm { background: var(--cta-green); color: #fff; }
     .modal-btn.edit { background: transparent; color: #ccc; border: 1px solid var(--border-grey); }
+
+    .field-error { border: 2px solid #E53935 !important; background: #FFF6F6 !important; }
+    .tap-group.error { outline: 2px solid #E53935; outline-offset: 3px; border-radius: 8px; }
+    #formBanner {
+        display: none; position: fixed; left: 50%; transform: translateX(-50%);
+        bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+        width: min(92%, 460px); z-index: 9999; padding: 13px 16px; border-radius: 10px;
+        font: 600 14px/1.4 Arial, Helvetica, sans-serif; text-align: center;
+        box-shadow: 0 8px 26px rgba(0,0,0,.28);
+    }
+    #formBanner.banner-err { background: #E53935; color: #fff; }
+    #formBanner.banner-ok  { background: #00A676; color: #fff; }
 </style>
 </head>
 <body>
@@ -189,7 +201,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     </div>
 
     <div class="card" id="formCard">
-        <form id="dietForm">
+        <form id="dietForm" novalidate>
             <input type="hidden" name="order_id" id="f_order_id">
             <h4>Contact Details</h4>
             <label>Name *</label><input name="name" id="f_name" required>
@@ -405,52 +417,109 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         });
     });
 
-    function validateForm() {
-        const form = document.getElementById('dietForm');
-        if (!form.reportValidity()) return false; // native required fields (text/email/textarea)
-
-        let ok = true;
-        document.querySelectorAll('.tap-group[data-required="true"]').forEach(function (group) {
-            const field = group.getAttribute('data-field');
-            const hiddenInput = document.getElementById('h_' + field);
-            if (!hiddenInput.value) {
-                group.classList.add('error');
-                ok = false;
-            }
-        });
-        if (!ok) alert('Please select all required options (marked *) before submitting.');
-        return ok;
+    // ---------- validation ----------
+    // The browser's own required-field bubble is unreliable on phones (on iOS it
+    // often never shows, so the tap looked dead). We validate ourselves: every
+    // missing field turns red, a banner names them, and the page glides to the
+    // first one straight away.
+    function labelFor(el) {
+        let p = el.previousElementSibling;
+        while (p && p.tagName !== 'LABEL') p = p.previousElementSibling;
+        return p ? p.textContent.replace('*', '').replace(/\(optional\)/i, '').trim() : '';
     }
 
-    function buildWhatsAppMessage(data) {
+    function findMissing() {
+        const form = document.getElementById('dietForm');
+        const missing = [];
+        form.querySelectorAll('input[required], select[required], textarea[required]').forEach(function (el) {
+            if (el.type === 'hidden') return;
+            const v = (el.value || '').trim();
+            let bad = !v;
+            if (!bad && el.type === 'email') bad = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+            el.classList.toggle('field-error', bad);
+            if (bad) missing.push(el);
+        });
+        document.querySelectorAll('.tap-group[data-required="true"]').forEach(function (group) {
+            const hidden = document.getElementById('h_' + group.getAttribute('data-field'));
+            const bad = !hidden || !hidden.value;
+            group.classList.toggle('error', bad);
+            if (bad) missing.push(group);
+        });
+        missing.sort(function (a, b) {
+            return (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1;
+        });
+        return missing;
+    }
+
+    function showBanner(text, kind) {
+        let bar = document.getElementById('formBanner');
+        if (!bar) {
+            bar = document.createElement('div');
+            bar.id = 'formBanner';
+            document.body.appendChild(bar);
+        }
+        bar.className = kind === 'ok' ? 'banner-ok' : 'banner-err';
+        bar.textContent = text;
+        bar.style.display = 'block';
+        clearTimeout(bar._t);
+        bar._t = setTimeout(function () { bar.style.display = 'none'; }, 6000);
+    }
+
+    function reportMissing(missing) {
+        const names = missing.map(labelFor).filter(Boolean);
+        const shown = names.slice(0, 3).join(', ') + (names.length > 3 ? ' +' + (names.length - 3) + ' more' : '');
+        showBanner('Please fill in: ' + (shown || 'the fields marked in red'), 'err');
+        const first = missing[0];
+        first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (first.focus && first.tagName !== 'DIV') {
+            setTimeout(function () { try { first.focus({ preventScroll: true }); } catch (e) {} }, 350);
+        }
+    }
+
+    function validateForm() {
+        const missing = findMissing();
+        if (missing.length) { reportMissing(missing); return false; }
+        return true;
+    }
+
+    // clear the red outline as soon as a field is filled in
+    document.getElementById('dietForm').addEventListener('input', function (e) {
+        if (e.target.classList && e.target.value && e.target.value.trim()) e.target.classList.remove('field-error');
+    });
+    document.getElementById('dietForm').addEventListener('change', function (e) {
+        if (e.target.classList && e.target.value) e.target.classList.remove('field-error');
+    });
+
+    function buildWhatsAppMessage(data, hasFile) {
         let msg = "Hi Rushikesh! Here are my diet plan details:\n\n";
         const labels = {
-            name: "Name", whatsapp: "WhatsApp", email: "Email", gender: "Gender", age: "Age",
-            weight: "Weight", height: "Height", diet_preference: "Diet preference",
-            health_issues: "Health issues", medications: "Medications", allergies: "Allergies",
-            workout_plan: "Workout", south_indian_pref: "South Indian food", smoke: "Smokes",
-            alcohol: "Alcohol", sleep_hours: "Sleep", daily_routine: "Daily routine",
+            name: "Name", whatsapp: "WhatsApp", email: "Email", state: "State", city: "City",
+            gender: "Gender", age: "Age", weight: "Weight", height: "Height",
+            diet_preference: "Diet preference", health_issues: "Health issues", medications: "Medications",
+            allergies: "Allergies", workout_plan: "Workout", south_indian_pref: "South Indian food",
+            smoke: "Smokes", alcohol: "Alcohol", sleep_hours: "Sleep", daily_routine: "Daily routine",
             challenges: "Challenges", target_goal: "Target goal", meal_frequency: "Meal frequency",
             disliked_foods: "Disliked foods", plan_interested: "Plan"
         };
         for (const [key, label] of Object.entries(labels)) {
-            if (data[key]) msg += `${label}: ${data[key]}\n`;
+            if (data[key] && typeof data[key] === 'string') msg += `${label}: ${data[key]}\n`;
         }
+        if (hasFile) msg += "\nI'll attach my blood report in this chat.";
         return msg;
     }
 
     document.getElementById('waBtn').addEventListener('click', function () {
+        if (!validateForm()) return;
         const form = document.getElementById('dietForm');
-        const data = Object.fromEntries(new FormData(form).entries());
-        if (!data.name || !data.whatsapp) {
-            alert('Please fill in at least your name and WhatsApp number first.');
-            return;
-        }
-        const msg = buildWhatsAppMessage(data);
-        window.open('https://wa.me/918459720620?text=' + encodeURIComponent(msg), '_blank');
+        const fd = new FormData(form);
+        const data = Object.fromEntries(fd.entries());
+        const fileInput = form.querySelector('input[type="file"]');
+        const hasFile = !!(fileInput && fileInput.files && fileInput.files.length);
+        window.open('https://wa.me/918459720620?text=' + encodeURIComponent(buildWhatsAppMessage(data, hasFile)), '_blank');
+        if (hasFile) showBanner('WhatsApp opened — please attach your blood report in that chat.', 'ok');
     });
 
-    // Step 1: form submit click -> validate -> show confirm popup (does NOT submit yet)
+    // Step 1: validate, then ask them to confirm (nothing is sent yet)
     document.getElementById('dietForm').addEventListener('submit', function (e) {
         e.preventDefault();
         if (!validateForm()) return;
@@ -461,7 +530,15 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         document.getElementById('confirmModal').style.display = 'none';
     });
 
-    // Step 2: actual submission happens only after they confirm in the popup
+    function showSuccess() {
+        document.getElementById('formCard').style.display = 'none';
+        const badge = document.querySelector('.success-badge');
+        if (badge) badge.style.display = 'none';
+        document.getElementById('successView').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Step 2: send, and only report success when the server says it worked
     document.getElementById('confirmSubmitBtn').addEventListener('click', async function () {
         document.getElementById('confirmModal').style.display = 'none';
         const btn = document.getElementById('submitBtn');
@@ -471,14 +548,16 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         btn.disabled = true;
         btn.textContent = 'Submitting...';
 
+        let res, body = {};
         try {
-            await fetch(API + '/api/submit-diet-form', {
-                method: 'POST',
-                body: formData
-            });
-            document.getElementById('formCard').style.display = 'none';
-            document.querySelector('.success-badge').style.display = 'none';
-            document.getElementById('successView').style.display = 'block';
+            res = await fetch(API + '/api/submit-diet-form', { method: 'POST', body: formData });
+            try { body = await res.json(); } catch (e) {}
+        } catch (err) {
+            res = null;
+        }
+
+        if (res && res.ok) {
+            showSuccess();
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'Lead',
                     { content_name: 'Diet Plan Questionnaire', content_type: 'coaching_program' },
@@ -488,11 +567,20 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'generate_lead', { currency: 'INR', value: 0 });
             }
-        } catch (err) {
-            alert('Something went wrong. Please try again or use the WhatsApp option below.');
-            btn.disabled = false;
-            btn.textContent = 'Submit My Details';
+            return;
         }
+
+        if (res && res.status === 409) {        // already received for this payment
+            showSuccess();
+            showBanner('Your details were already received — I will reach out on WhatsApp.', 'ok');
+            return;
+        }
+
+        btn.disabled = false;
+        btn.textContent = 'Submit My Details';
+        const msg = (body && body.error) ? body.error
+            : 'Could not submit right now. Please check your internet and try again, or use the WhatsApp option below.';
+        showBanner(msg, 'err');
     });
 </script>
 
