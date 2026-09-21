@@ -199,6 +199,9 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     .file-remove { background: transparent; border: 1px solid rgba(255,107,107,.55); color: #FF8A8A;
                    border-radius: 6px; padding: 4px 10px; font: 600 12px Arial, sans-serif; cursor: pointer;
                    flex-shrink: 0; }
+
+    .upload-note { display: none; margin-top: 10px; text-align: center; color: #F5C842;
+                   font: 600 13px/1.4 Arial, Helvetica, sans-serif; }
 </style>
 </head>
 <body>
@@ -348,6 +351,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             </select>
 
             <button type="submit" class="submit-btn" id="submitBtn">Submit My Details</button>
+            <div id="uploadNote" class="upload-note">Uploading your reports — please keep this page open.</div>
             <button type="button" class="wa-btn" id="waBtn">📱 Send My Details on WhatsApp Instead</button>
         </form>
     </div>
@@ -428,6 +432,52 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         });
     });
 
+
+
+    // ---------- upload helpers ----------
+    // Phone cameras produce 8-12 MB photos. A report only needs to be readable,
+    // so photos are scaled to 2000 px on the long side before sending — the
+    // text stays sharp and the upload shrinks roughly tenfold. PDFs go as they are.
+    async function shrinkPhoto(file) {
+        if (!/^image\/(jpeg|png|webp|heic|heif)$/i.test(file.type || '') || file.size < 600 * 1024) return file;
+        try {
+            const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
+            const LONG = 2000;
+            const scale = Math.min(1, LONG / Math.max(bmp.width, bmp.height));
+            const w = Math.round(bmp.width * scale), h = Math.round(bmp.height * scale);
+            const c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            c.getContext('2d').drawImage(bmp, 0, 0, w, h);
+            if (bmp.close) bmp.close();
+            const blob = await new Promise(function (res) { c.toBlob(res, 'image/jpeg', 0.82); });
+            if (!blob || blob.size >= file.size) return file;
+            const name = file.name.replace(/\.(heic|heif|png|webp|jpe?g)$/i, '') + '.jpg';
+            return new File([blob], name, { type: 'image/jpeg', lastModified: Date.now() });
+        } catch (e) {
+            return file;                       // could not decode here — send the original
+        }
+    }
+
+    // XMLHttpRequest rather than fetch: it reports upload progress, and it
+    // can give up after a time limit instead of waiting forever.
+    function sendForm(url, formData, onProgress) {
+        return new Promise(function (resolve) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url);
+            xhr.timeout = 180000;              // 3 minutes
+            xhr.upload.onprogress = function (e) {
+                if (e.lengthComputable && onProgress) onProgress(Math.round(e.loaded / e.total * 100));
+            };
+            xhr.onload = function () {
+                let body = {};
+                try { body = JSON.parse(xhr.responseText || '{}'); } catch (e) {}
+                resolve({ ok: xhr.status >= 200 && xhr.status < 300, status: xhr.status, body: body });
+            };
+            xhr.onerror = function () { resolve({ ok: false, status: 0, body: {}, reason: 'network' }); };
+            xhr.ontimeout = function () { resolve({ ok: false, status: 0, body: {}, reason: 'timeout' }); };
+            xhr.send(formData);
+        });
+    }
 
     // ---------- report files ----------
     // A file picker replaces its whole selection every time it is opened, so
@@ -633,20 +683,35 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         document.getElementById('confirmModal').style.display = 'none';
         const btn = document.getElementById('submitBtn');
         const form = document.getElementById('dietForm');
+        btn.disabled = true;
+        const note = document.getElementById('uploadNote');
+
+        if (!navigator.onLine) {
+            btn.disabled = false;
+            btn.textContent = 'Submit My Details';
+            showBanner('You seem to be offline. Please check your internet and try again.', 'err');
+            return;
+        }
+
+        const reports = window.__reports || [];
+        if (reports.length) {
+            btn.textContent = 'Preparing your reports...';
+            if (note) note.style.display = 'block';
+        }
+        const prepared = [];
+        for (const f of reports) prepared.push(await shrinkPhoto(f));
+
         const formData = new FormData(form);
         formData.delete('blood_report');
-        (window.__reports || []).forEach(function (f) { formData.append('blood_report', f, f.name); });
+        prepared.forEach(function (f) { formData.append('blood_report', f, f.name); });
 
-        btn.disabled = true;
-        btn.textContent = 'Submitting...';
-
-        let res, body = {};
-        try {
-            res = await fetch(API + '/api/submit-diet-form', { method: 'POST', body: formData });
-            try { body = await res.json(); } catch (e) {}
-        } catch (err) {
-            res = null;
-        }
+        btn.textContent = reports.length ? 'Uploading... 0%' : 'Submitting...';
+        const r = await sendForm(API + '/api/submit-diet-form', formData, function (pct) {
+            btn.textContent = pct < 100 ? 'Uploading... ' + pct + '%' : 'Almost done...';
+        });
+        if (note) note.style.display = 'none';
+        const res = r.ok ? { ok: true, status: r.status } : (r.status ? { ok: false, status: r.status } : null);
+        const body = r.body || {};
 
         if (res && res.ok) {
             showSuccess();
@@ -671,7 +736,9 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         btn.disabled = false;
         btn.textContent = 'Submit My Details';
         const msg = (body && body.error) ? body.error
-            : 'Could not submit right now. Please check your internet and try again, or use the WhatsApp option below.';
+            : (r.reason === 'timeout'
+                ? 'The upload is taking too long on this connection. Please try again on Wi-Fi, or tap "Send My Details on WhatsApp" below.'
+                : 'Could not submit right now. Please check your internet and try again, or use the WhatsApp option below.');
         showBanner(msg, 'err');
     });
 </script>
