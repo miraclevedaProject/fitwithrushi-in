@@ -3427,9 +3427,21 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                 e.preventDefault();
                 window.__mvInteracted = true;
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // The follow-up nudge exists only to absorb a small layout settle
+                // while the page loads. The moment the visitor scrolls, swipes or
+                // presses a key it is cancelled — it must never pull them back
+                // from somewhere they chose to go.
+                let userMoved = false;
+                const cancel = function () { userMoved = true; };
+                const evs = ['wheel', 'touchstart', 'touchmove', 'keydown', 'pointerdown'];
+                evs.forEach(function (ev) { window.addEventListener(ev, cancel, { passive: true }); });
                 setTimeout(function () {
+                    evs.forEach(function (ev) { window.removeEventListener(ev, cancel); });
+                    if (userMoved) return;
                     const off = target.getBoundingClientRect().top;
-                    if (Math.abs(off) > 60) target.scrollIntoView({ behavior: 'auto', block: 'start' });
+                    if (Math.abs(off) > 60 && Math.abs(off) < 400) {
+                        target.scrollIntoView({ behavior: 'auto', block: 'start' });
+                    }
                 }, 1100);
             });
         });
