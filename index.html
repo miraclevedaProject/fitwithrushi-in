@@ -3050,11 +3050,12 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         }
         function initiateRazorpay(amount, planName) {
             loadRazorpay().catch(function () {});
-            mvPendingPlan = { amount, planName };
+            mvPendingPlan = { amount, planName,
+                icId: 'ic_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8) };
             document.getElementById('mvCheckoutPlanLabel').textContent = planName + " — ₹" + Number(amount).toLocaleString('en-IN');
             document.getElementById('mvCheckoutModal').style.display = 'flex';
             if (typeof fbq !== 'undefined') {
-                fbq('track', 'InitiateCheckout', { value: amount, currency: 'INR', content_name: planName, content_type: 'coaching_program', content_ids: ['mv-coaching-' + planName.toLowerCase().replace(/[^a-z0-9]+/g,'-')] });
+                fbq('track', 'InitiateCheckout', { value: amount, currency: 'INR', content_name: planName, content_type: 'coaching_program', content_ids: ['mv-coaching-' + planName.toLowerCase().replace(/[^a-z0-9]+/g,'-')] }, { eventID: mvPendingPlan.icId });
             }
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'begin_checkout', {
@@ -3108,7 +3109,8 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                         amount: mvPendingPlan.amount,
                         name, phone, email,
                         fbp: mvCookie('_fbp'),
-                        fbc: mvFbc()
+                        fbc: mvFbc(),
+                        icEventId: mvPendingPlan.icId
                     })
                 });
                 const order = await res.json();
