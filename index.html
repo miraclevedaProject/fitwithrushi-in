@@ -3060,7 +3060,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                             '&whatsapp=' + encodeURIComponent(phone) +
                             '&email=' + encodeURIComponent(email) +
                             '&plan=' + encodeURIComponent(mvPendingPlan.planName) +
-                            '&amount=' + encodeURIComponent(mvPendingPlan.amount);
+                            '&amount=' + encodeURIComponent((order && order.amount) ? order.amount / 100 : mvPendingPlan.amount);
                     },
                     modal: {
                         ondismiss: function () {
