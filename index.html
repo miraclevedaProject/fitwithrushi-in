@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en-US">
 	<head>
+    <script>
+    // Runs before the Meta pixel. Links into this page carry the client's name,
+    // phone and email so forms can be pre-filled — but the pixel reports the page
+    // address to Meta, and personal details must never reach Meta in plain text.
+    // They are kept for this page only and removed from the address bar.
+    (function () {
+        try {
+            var q = new URLSearchParams(location.search);
+            var orig = location.search, had = false;
+            ['name', 'whatsapp', 'email'].forEach(function (k) { if (q.has(k)) { had = true; q.delete(k); } });
+            if (had) {
+                window.__mvOrigSearch = orig;
+                try { sessionStorage.setItem('mv_prefill', orig); } catch (e) {}
+                history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
+            } else {
+                // after a refresh the details are gone from the address — recover them
+                try {
+                    var s = sessionStorage.getItem('mv_prefill');
+                    if (s && new URLSearchParams(s).get('order') === q.get('order')) window.__mvOrigSearch = s;
+                } catch (e) {}
+            }
+        } catch (e) {}
+    })();
+    </script>
+
 <!-- SEO Meta Tags -->
 <meta name="description" content="Miracle Veda by Rushikesh Umbarkar — certified nutritionist offering personalized Indian fat loss diet plans for PCOS, thyroid and stubborn fat. 3700+ transformations with homemade food. No crash diets, no starvation.">
 <meta name="keywords" content="Rushikesh Umbarkar, Miracle Veda, Indian fat loss diet plan, PCOS diet plan India, thyroid weight loss diet, online nutritionist India, personalized diet plan, fat loss coach India">
@@ -3041,7 +3066,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
         // "Try Again" from a failed-payment email: pre-fill details and reopen checkout automatically
         (function mvHandleRetryFromEmail() {
-            const params = new URLSearchParams(window.location.search);
+            const params = new URLSearchParams(window.__mvOrigSearch || window.location.search);
             if (params.get('retry') !== '1') return;
 
             const planAmounts = { '1-Month Plan': 2499, '3-Month Plan': 4999, '6-Month Plan': 7999 };

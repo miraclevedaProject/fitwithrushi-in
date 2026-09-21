@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+    // Runs before the Meta pixel. Links into this page carry the client's name,
+    // phone and email so forms can be pre-filled — but the pixel reports the page
+    // address to Meta, and personal details must never reach Meta in plain text.
+    // They are kept for this page only and removed from the address bar.
+    (function () {
+        try {
+            var q = new URLSearchParams(location.search);
+            var orig = location.search, had = false;
+            ['name', 'whatsapp', 'email'].forEach(function (k) { if (q.has(k)) { had = true; q.delete(k); } });
+            if (had) {
+                window.__mvOrigSearch = orig;
+                try { sessionStorage.setItem('mv_prefill', orig); } catch (e) {}
+                history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
+            } else {
+                // after a refresh the details are gone from the address — recover them
+                try {
+                    var s = sessionStorage.getItem('mv_prefill');
+                    if (s && new URLSearchParams(s).get('order') === q.get('order')) window.__mvOrigSearch = s;
+                } catch (e) {}
+            }
+        } catch (e) {}
+    })();
+    </script>
+
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-W4YVCF7Y9G"></script>
 <script>
@@ -383,7 +408,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
 <script>
     const API = "https://miracleveda-backend.help-miracleveda.workers.dev";
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.__mvOrigSearch || window.location.search);
 
     // This page loads right after a successful payment — fire the Purchase event
     // once here (only if we genuinely have an order + amount, i.e. came from checkout).
