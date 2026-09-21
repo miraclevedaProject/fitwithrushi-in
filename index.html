@@ -2971,6 +2971,30 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         // Razorpay's checkout pulls in ~75 files (~740 KB). It is fetched the
         // moment the checkout popup opens, so it is ready by the time the
         // visitor has typed their details — instead of on every page view.
+
+        // Meta's browser id (_fbp) and ad-click id (_fbc) go with the order so the
+        // server can report the sale against the right click. If a blocker kept
+        // the pixel from writing _fbc, it is rebuilt from the fbclid the visitor
+        // arrived with, which is kept for this visit.
+        (function () {
+            try {
+                var id = new URLSearchParams(location.search).get('fbclid');
+                if (id) sessionStorage.setItem('mv_fbclid', id + '|' + Date.now());
+            } catch (e) {}
+        })();
+        function mvCookie(name) {
+            var m = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+            return m ? decodeURIComponent(m[1]) : null;
+        }
+        function mvFbc() {
+            var c = mvCookie('_fbc');
+            if (c) return c;
+            try {
+                var v = sessionStorage.getItem('mv_fbclid');
+                if (v) { var p = v.split('|'); return 'fb.1.' + (p[1] || Date.now()) + '.' + p[0]; }
+            } catch (e) {}
+            return null;
+        }
         var __rzp = null;
         function loadRazorpay() {
             if (window.Razorpay) return Promise.resolve();
@@ -3043,7 +3067,9 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                     body: JSON.stringify({
                         planName: mvPendingPlan.planName,
                         amount: mvPendingPlan.amount,
-                        name, phone, email
+                        name, phone, email,
+                        fbp: mvCookie('_fbp'),
+                        fbc: mvFbc()
                     })
                 });
                 const order = await res.json();
