@@ -53,7 +53,7 @@
 </script>
 
 <!-- Google Analytics (GA4) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-W4YVCF7Y9G"></script>
+
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -63,7 +63,7 @@
 <!-- End Google Analytics -->
 
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="dns-prefetch" href="https://connect.facebook.net"><link rel="dns-prefetch" href="https://i.ytimg.com"><link rel="preload" as="image" href="wp-content/uploads/hero-poster.webp" type="image/webp" fetchpriority="high">
 		<link rel="profile" href="http://gmpg.org/xfn/11">
 
 		
@@ -89,8 +89,8 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 	}
 /*# sourceURL=wp-emoji-styles-inline-css */
 </style>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" id="jquery-core-js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.4.1/jquery-migrate.min.js" id="jquery-migrate-js"></script>
+
+
 
 <meta name="generator" content="WordPress 6.9.7" />
 <link rel="canonical" href="index.html" />
@@ -98,11 +98,7 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 
 <!-- Google Tag Manager -->
 <script>
-(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-52D3NGRF');
+
 </script>
 <!-- End Google Tag Manager -->
 
@@ -151,8 +147,8 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fat Loss Program &#8211; Rushikesh Umbarkar</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&#038;family=Inter:wght@400;500;600&#038;display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"></noscript>
     <style>
         * {
             margin: 0;
@@ -2169,7 +2165,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                 <div class="video-section">
                     <div class="video-wrapper">
                         <!-- Line ~290 -->
-<button type="button" class="vplay" data-vid="_BIQEIOlt_c" aria-label="Play: How my fat loss program works"><img class="vposter" loading="eager" fetchpriority="high" decoding="async" src="https://i.ytimg.com/vi/_BIQEIOlt_c/maxresdefault.jpg" alt=""><span class="vplay-btn"></span></button>
+<button type="button" class="vplay" data-vid="_BIQEIOlt_c" aria-label="Play: How my fat loss program works"><img class="vposter" loading="eager" fetchpriority="high" decoding="async" src="wp-content/uploads/hero-poster.webp" width="960" height="540" alt=""><span class="vplay-btn"></span></button>
                     </div>
                     <p class="video-caption">Watch: Full program walkthrough – exactly how this system works.</p>
                 </div>
@@ -2971,7 +2967,26 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         const MV_API = "https://miracleveda-backend.help-miracleveda.workers.dev";
         let mvPendingPlan = { amount: 0, planName: "" };
 
+        
+        // Razorpay's checkout pulls in ~75 files (~740 KB). It is fetched the
+        // moment the checkout popup opens, so it is ready by the time the
+        // visitor has typed their details — instead of on every page view.
+        var __rzp = null;
+        function loadRazorpay() {
+            if (window.Razorpay) return Promise.resolve();
+            if (__rzp) return __rzp;
+            __rzp = new Promise(function (resolve, reject) {
+                var t = document.createElement('script');
+                t.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                t.async = true;
+                t.onload = function () { resolve(); };
+                t.onerror = function () { __rzp = null; reject(new Error('Razorpay did not load')); };
+                document.head.appendChild(t);
+            });
+            return __rzp;
+        }
         function initiateRazorpay(amount, planName) {
+            loadRazorpay().catch(function () {});
             mvPendingPlan = { amount, planName };
             document.getElementById('mvCheckoutPlanLabel').textContent = planName + " — ₹" + amount;
             document.getElementById('mvCheckoutModal').style.display = 'flex';
@@ -3069,6 +3084,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                         }
                     }
                 };
+                await loadRazorpay();
                 const rzp = new Razorpay(options);
                 rzp.on('payment.failed', async function () {
                     await fetch(MV_API + '/api/payment-failed', {
@@ -3211,45 +3227,78 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             }
 
             if (IS_IOS) {
-                var players = [], unmuted = {};
+                // iOS needs a real player already in place for a single tap to
+                // start playback — but building all fifteen at load pulled ~15 MB
+                // of YouTube before the visitor saw anything. Each player is now
+                // built only as its card comes within about a screen of view, so
+                // it is ready before it can be tapped and nothing loads early.
+                var players = [], unmuted = {}, apiReady = false, waiting = [];
+
+                function wire(btn) {
+                    var i = buttons.indexOf(btn);
+                    players[i] = new YT.Player(btn.querySelector('iframe'), {
+                        events: {
+                            onStateChange: function (e) {
+                                if (e.data === YT.PlayerState.ENDED) {
+                                    try { e.target.stopVideo(); } catch (err) {}
+                                    return;
+                                }
+                                if (e.data !== YT.PlayerState.PLAYING) return;
+                                if (!unmuted[i]) {
+                                    unmuted[i] = true;
+                                    try {
+                                        if (e.target.isMuted()) e.target.unMute();
+                                        if (e.target.getVolume() < 30) e.target.setVolume(100);
+                                    } catch (err) {}
+                                }
+                                players.forEach(function (p) {
+                                    if (!p || p === e.target) return;
+                                    try {
+                                        if (p.getPlayerState() === YT.PlayerState.PLAYING) p.pauseVideo();
+                                    } catch (err) {}
+                                });
+                            }
+                        }
+                    });
+                }
 
                 window.onYouTubeIframeAPIReady = function () {
-                    buttons.forEach(function (btn, i) {
-                        players[i] = new YT.Player(btn.querySelector('iframe'), {
-                            events: {
-                                onStateChange: function (e) {
-                                    if (e.data === YT.PlayerState.ENDED) {
-                                        try { e.target.stopVideo(); } catch (err) {}
-                                        return;
-                                    }
-                                    if (e.data !== YT.PlayerState.PLAYING) return;
-                                    if (!unmuted[i]) {
-                                        unmuted[i] = true;
-                                        try {
-                                            if (e.target.isMuted()) e.target.unMute();
-                                            if (e.target.getVolume() < 30) e.target.setVolume(100);
-                                        } catch (err) {}
-                                    }
-                                    players.forEach(function (p) {
-                                        if (p === e.target) return;
-                                        try {
-                                            if (p.getPlayerState() === YT.PlayerState.PLAYING) p.pauseVideo();
-                                        } catch (err) {}
-                                    });
-                                }
-                            }
-                        });
-                    });
+                    apiReady = true;
+                    waiting.splice(0).forEach(wire);
                 };
 
-                buttons.forEach(function (btn) {
-                    btn.classList.add('playing');          // hide poster and play badge
-                    btn.appendChild(makeFrame(btn.dataset.vid, btn.getAttribute('aria-label'), false));
-                });
+                var apiRequested = false;
+                function requestApi() {
+                    if (apiRequested) return;
+                    apiRequested = true;
+                    var tag = document.createElement('script');
+                    tag.src = 'https://www.youtube.com/iframe_api';
+                    document.head.appendChild(tag);
+                }
 
-                var tag = document.createElement('script');
-                tag.src = 'https://www.youtube.com/iframe_api';
-                document.head.appendChild(tag);
+                function build(btn) {
+                    if (btn.dataset.built) return;
+                    btn.dataset.built = '1';
+                    btn.classList.add('playing');
+                    btn.appendChild(makeFrame(btn.dataset.vid, btn.getAttribute('aria-label'), false));
+                    requestApi();
+                    if (apiReady) wire(btn); else waiting.push(btn);
+                }
+
+                if ('IntersectionObserver' in window) {
+                    var io = new IntersectionObserver(function (entries) {
+                        entries.forEach(function (en) {
+                            if (en.isIntersecting) { io.unobserve(en.target); build(en.target); }
+                        });
+                    }, { rootMargin: '900px 0px' });
+                    buttons.forEach(function (btn) { io.observe(btn); });
+                } else {
+                    buttons.forEach(build);
+                }
+                // a tap on a card that has not been built yet builds it at once
+                buttons.forEach(function (btn) {
+                    btn.addEventListener('click', function () { build(btn); });
+                });
                 return;
             }
 
@@ -3338,7 +3387,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     </script>
 
     <!-- Razorpay Checkout -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
 
     <!-- ===== Checkout Modal ===== -->
     <div id="mvCheckoutModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:16px;">
@@ -3354,5 +3403,29 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     </div>
 
 
+<script>
+    // Google Analytics and Tag Manager are only reporting tools — nothing on the
+    // page depends on them — so they load once the page itself is done. gtag()
+    // calls made before then sit in dataLayer and are sent when the script lands.
+    (function () {
+        function loadLate() {
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-W4YVCF7Y9G';
+            document.head.appendChild(g);
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-52D3NGRF');
+        }
+        function whenIdle() {
+            if ('requestIdleCallback' in window) requestIdleCallback(loadLate, { timeout: 2500 });
+            else setTimeout(loadLate, 1200);
+        }
+        if (document.readyState === 'complete') whenIdle();
+        else window.addEventListener('load', whenIdle);
+    })();
+    </script>
 </body>
 </html>

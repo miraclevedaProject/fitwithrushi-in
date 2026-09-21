@@ -1,0 +1,8 @@
+# Images and media: serve from cache instantly, refresh quietly in the
+# background. Kept short enough that swapped client photos show up within a day.
+/wp-content/uploads/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Pages: always check for a fresh copy, so edits go live immediately
+/*
+  X-Content-Type-Options: nosniff
