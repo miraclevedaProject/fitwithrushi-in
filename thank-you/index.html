@@ -10,7 +10,7 @@
         try {
             var q = new URLSearchParams(location.search);
             var orig = location.search, had = false;
-            ['name', 'whatsapp', 'email'].forEach(function (k) { if (q.has(k)) { had = true; q.delete(k); } });
+            ['name', 'whatsapp', 'email', 't'].forEach(function (k) { if (q.has(k)) { had = true; q.delete(k); } });
             if (had) {
                 window.__mvOrigSearch = orig;
                 try { sessionStorage.setItem('mv_prefill', orig); } catch (e) {}
@@ -63,6 +63,12 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 @font-face{font-family:'Inter Fallback Android';src:local('Roboto'),local('Roboto-Regular');font-weight:100 900;size-adjust:108.12%;ascent-override:89.6%;descent-override:22.31%;line-gap-override:0.0%;}
 @font-face{font-family:'Montserrat Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:100 900;size-adjust:110.8%;ascent-override:87.36%;descent-override:22.65%;line-gap-override:0.0%;}
 @font-face{font-family:'Montserrat Fallback Android';src:local('Roboto Bold'),local('Roboto-Bold');font-weight:100 900;size-adjust:117.5%;ascent-override:82.38%;descent-override:21.36%;line-gap-override:0.0%;}    a, button, .tap-option { touch-action: manipulation; }
+
+    .success-actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .success-actions .submit-btn { margin-top: 0; }
+    .success-actions .wa-btn { margin-top: 0; text-decoration: none; }
+    .update-note { background: rgba(0,166,118,.12); border: 1px solid rgba(0,166,118,.45); color: #cfe; border-radius: 8px;
+                   padding: 12px 14px; margin-bottom: 18px; font: 500 13.5px/1.5 Arial, Helvetica, sans-serif; }
 </style>
 <title>Thank You — Miracle Veda</title>
 
@@ -392,7 +398,11 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     <div class="card success-view" id="successView">
         <span class="icon">🎉</span>
         <h3>All set!</h3>
-        <p>We've received your details. Rushikesh will personally review them and reach out on WhatsApp with your custom diet plan soon.</p>
+        <p>We've received your details. Your personalised diet plan will reach you on WhatsApp within <b>12–48 hours</b>.</p>
+        <div class="success-actions">
+            <button type="button" class="submit-btn" id="updateBtn">✏️ Update My Details</button>
+            <a class="wa-btn" id="successWa" href="https://wa.me/918459720620" target="_blank" rel="noopener">💬 Message Me on WhatsApp</a>
+        </div>
     </div>
 
 </div>
@@ -466,6 +476,82 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     });
 
 
+
+
+    // ---------- already submitted / update ----------
+    // A link from the payment email can be opened again later. If this order's
+    // form is already in, the client lands on "All set!" with a way to update;
+    // an update starts from what they sent before.
+    const FORM_T = params.get('t') || '';
+    window.__mvMode = 'new';
+    window.__mvSaved = null;
+
+    function waHref(text) { return 'https://wa.me/918459720620?text=' + encodeURIComponent(text); }
+    function setSuccessWa() {
+        const nm = (document.getElementById('f_name') || {}).value || '';
+        document.getElementById('successWa').href = waHref('Hi Rushikesh' + (nm ? ', this is ' + nm : '') + '. I have submitted my diet questionnaire.');
+    }
+    function showDone() {
+        document.getElementById('formCard').style.display = 'none';
+        const badge = document.querySelector('.success-badge');
+        if (badge) badge.style.display = 'none';
+        document.getElementById('successView').style.display = 'block';
+        // updating needs the signed link; without it, WhatsApp is the way to make changes
+        document.getElementById('updateBtn').style.display = FORM_T ? '' : 'none';
+        setSuccessWa();
+    }
+    function prefill(data) {
+        const form = document.getElementById('dietForm');
+        Object.keys(data || {}).forEach(function (k) {
+            const v = String(data[k] == null ? '' : data[k]);
+            const group = document.querySelector('.tap-group[data-field="' + k + '"]');
+            if (group) {
+                const hit = Array.prototype.find.call(group.querySelectorAll('.tap-option'),
+                    function (b) { return b.textContent.trim() === v.trim(); });
+                if (hit) hit.click();
+                return;
+            }
+            const el = form.elements[k];
+            if (!el || el.type === 'file' || el.type === 'hidden') return;
+            el.value = v;
+        });
+    }
+
+    document.getElementById('updateBtn').addEventListener('click', function () {
+        if (window.__mvSaved) prefill(window.__mvSaved);
+        window.__mvMode = 'update';
+        window.__mvSubmitted = false;
+        document.getElementById('successView').style.display = 'none';
+        document.getElementById('formCard').style.display = '';
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = false;
+        btn.textContent = 'Save My Changes';
+        let note = document.getElementById('updateNote');
+        if (!note) {
+            note = document.createElement('div');
+            note.id = 'updateNote';
+            note.className = 'update-note';
+            note.textContent = 'Change anything that is different now, then tap "Save My Changes". Reports you sent earlier are already saved — add new ones only if you have them.';
+            const form = document.getElementById('dietForm');
+            form.insertBefore(note, form.firstChild);
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    (async function checkIfAlreadySubmitted() {
+        const order = params.get('order');
+        if (!order || !FORM_T) return;
+        try {
+            const r = await fetch(API + '/api/diet-form-status?order=' + encodeURIComponent(order) + '&t=' + encodeURIComponent(FORM_T));
+            if (!r.ok) return;
+            const st = await r.json();
+            if (st && st.submitted) {
+                window.__mvSaved = st.data || null;
+                window.__mvSubmitted = true;
+                showDone();
+            }
+        } catch (e) {}
+    })();
 
     // ---------- upload helpers ----------
     // Phone cameras produce 8-12 MB photos. A report only needs to be readable,
@@ -708,6 +794,8 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         const badge = document.querySelector('.success-badge');
         if (badge) badge.style.display = 'none';
         document.getElementById('successView').style.display = 'block';
+        document.getElementById('updateBtn').style.display = FORM_T ? '' : 'none';
+        setSuccessWa();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -736,6 +824,8 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
         const formData = new FormData(form);
         formData.delete('blood_report');
+        formData.set('mode', window.__mvMode);
+        if (FORM_T) formData.set('t', FORM_T);
         prepared.forEach(function (f) { formData.append('blood_report', f, f.name); });
 
         btn.textContent = reports.length ? 'Uploading... 0%' : 'Submitting...';
@@ -747,7 +837,16 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         const body = r.body || {};
 
         if (res && res.ok) {
+            const wasUpdate = window.__mvMode === 'update';
+            window.__mvSaved = {};
+            formData.forEach(function (v, k) { if (typeof v === 'string' && !['order_id', 'mode', 't'].includes(k)) window.__mvSaved[k] = v; });
+            window.__mvMode = 'new';
             showSuccess();
+            if (wasUpdate) {
+                showBanner(body.unchanged ? 'Nothing had changed — your details are already saved.'
+                                          : 'Your changes are saved. Rushikesh has been notified.', 'ok');
+                return;                      // the Lead was counted on the first submission
+            }
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'Lead',
                     { content_name: 'Diet Plan Questionnaire', content_type: 'coaching_program' },
@@ -762,12 +861,12 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
         if (res && res.status === 409) {        // already received for this payment
             showSuccess();
-            showBanner('Your details were already received — I will reach out on WhatsApp.', 'ok');
+            showBanner('Your details were already received. To change anything, tap WhatsApp below.', 'ok');
             return;
         }
 
         btn.disabled = false;
-        btn.textContent = 'Submit My Details';
+        btn.textContent = window.__mvMode === 'update' ? 'Save My Changes' : 'Submit My Details';
         const msg = (body && body.error) ? body.error
             : (r.reason === 'timeout'
                 ? 'The upload is taking too long on this connection. Please try again on Wi-Fi, or tap "Send My Details on WhatsApp" below.'
