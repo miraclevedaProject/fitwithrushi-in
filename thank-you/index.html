@@ -548,7 +548,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         const plan = st.plan || 'Miracle Veda Plan';
         if (typeof fbq !== 'undefined') {
             fbq('track', 'Purchase', {
-                value: value, currency: 'INR', content_name: plan, content_type: 'coaching_program',
+                value: value, currency: 'INR', content_name: plan, content_type: 'product',
                 content_ids: ['mv-coaching-' + plan.toLowerCase().replace(/[^a-z0-9]+/g, '-')]
             }, { eventID: 'purchase_' + order });
         }
@@ -871,7 +871,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             }
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'Lead',
-                    { content_name: 'Diet Plan Questionnaire', content_type: 'coaching_program' },
+                    { content_name: 'Diet Plan Questionnaire', content_type: 'product' },
                     { eventID: 'lead_' + (params.get('order') || '') }
                 );
             }

@@ -3070,7 +3070,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             document.getElementById('mvCheckoutPlanLabel').textContent = planName + " — ₹" + Number(amount).toLocaleString('en-IN');
             document.getElementById('mvCheckoutModal').style.display = 'flex';
             if (typeof fbq !== 'undefined') {
-                fbq('track', 'InitiateCheckout', { value: amount, currency: 'INR', content_name: planName, content_type: 'coaching_program', content_ids: ['mv-coaching-' + planName.toLowerCase().replace(/[^a-z0-9]+/g,'-')] }, { eventID: mvPendingPlan.icId });
+                fbq('track', 'InitiateCheckout', { value: amount, currency: 'INR', content_name: planName, content_type: 'product', content_ids: ['mv-coaching-' + planName.toLowerCase().replace(/[^a-z0-9]+/g,'-')] }, { eventID: mvPendingPlan.icId });
             }
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'begin_checkout', {
