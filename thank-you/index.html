@@ -439,31 +439,10 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
     // This page loads right after a successful payment — fire the Purchase event
     // once here (only if we genuinely have an order + amount, i.e. came from checkout).
-    if (params.get('order') && params.get('amount') && typeof fbq !== 'undefined') {
-        fbq('track', 'Purchase', {
-            value: parseFloat(params.get('amount')),
-            currency: 'INR',
-            content_name: params.get('plan') || 'Miracle Veda Plan',
-            content_type: 'coaching_program',
-            content_ids: ['mv-coaching-' + (params.get('plan') || 'plan').toLowerCase().replace(/[^a-z0-9]+/g, '-')]
-        }, { eventID: 'purchase_' + params.get('order') });
-    }
+    // Purchase is reported from reportPurchase(), once the server confirms the order.
 
     // GA4 purchase event (same trigger as the Meta one above)
-    if (params.get('order') && params.get('amount') && typeof gtag !== 'undefined') {
-        gtag('event', 'purchase', {
-            transaction_id: params.get('order'),
-            value: parseFloat(params.get('amount')),
-            currency: 'INR',
-            items: [{
-                item_id: 'mv-coaching',
-                item_name: params.get('plan') || 'Miracle Veda Plan',
-                price: parseFloat(params.get('amount')),
-                quantity: 1
-            }]
-        });
-    }
-
+    
     if (params.get('name')) document.getElementById('f_name').value = params.get('name');
     if (params.get('whatsapp')) document.getElementById('f_whatsapp').value = params.get('whatsapp');
     if (params.get('email')) document.getElementById('f_email').value = params.get('email');
@@ -554,6 +533,32 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
+
+    // The browser's Purchase is sent only when the server confirms this is a
+    // real paid order, paid within the last few hours, and not one of our test
+    // orders — with the amount actually charged, never the one in the address.
+    // Once per order per device, so reopening the page later adds nothing.
+    // (The server reports every real payment to Meta on its own as well.)
+    function reportPurchase(st) {
+        const order = params.get('order');
+        if (!order || !st || !st.paid || st.test || !st.fresh) return;
+        const key = 'mv_purchase_sent_' + order;
+        try { if (localStorage.getItem(key)) return; } catch (e) {}
+        const value = Number(st.amount) || 0;
+        const plan = st.plan || 'Miracle Veda Plan';
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'Purchase', {
+                value: value, currency: 'INR', content_name: plan, content_type: 'coaching_program',
+                content_ids: ['mv-coaching-' + plan.toLowerCase().replace(/[^a-z0-9]+/g, '-')]
+            }, { eventID: 'purchase_' + order });
+        }
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'purchase', { transaction_id: order, value: value, currency: 'INR',
+                items: [{ item_id: 'mv-coaching', item_name: plan, price: value, quantity: 1 }] });
+        }
+        try { localStorage.setItem(key, '1'); } catch (e) {}
+    }
+
     (async function checkIfAlreadySubmitted() {
         const order = params.get('order');
         if (!order || !FORM_T) return;
@@ -561,6 +566,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             const r = await fetch(API + '/api/diet-form-status?order=' + encodeURIComponent(order) + '&t=' + encodeURIComponent(FORM_T));
             if (!r.ok) return;
             const st = await r.json();
+            reportPurchase(st);
             if (st && st.submitted) {
                 window.__mvSaved = st.data || null;
                 window.__mvSubmitted = true;
