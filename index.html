@@ -3153,6 +3153,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                             // thank-you page rather than leaving them stuck.
                         }
                         window.location.href = 'thank-you/?order=' + order.orderId +
+                            (order.formToken ? '&t=' + order.formToken : '') +
                             '&name=' + encodeURIComponent(name) +
                             '&whatsapp=' + encodeURIComponent(phone) +
                             '&email=' + encodeURIComponent(email) +
