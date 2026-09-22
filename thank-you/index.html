@@ -69,6 +69,22 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
     .success-actions .wa-btn { margin-top: 0; text-decoration: none; }
     .update-note { background: rgba(0,166,118,.12); border: 1px solid rgba(0,166,118,.45); color: #cfe; border-radius: 8px;
                    padding: 12px 14px; margin-bottom: 18px; font: 500 13.5px/1.5 Arial, Helvetica, sans-serif; }
+
+    /* Safari draws a <select> in its own light style and ignores the dark
+       background, but keeps the white text — so the chosen state was white on
+       white. Take over the drawing so it matches every other field. */
+    select {
+        -webkit-appearance: none;
+        appearance: none;
+        background-color: #0d0d0d;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23bbbbbb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 40px;
+        color: #fff;
+    }
+    select:invalid, select option[value=""] { color: #888; }
+    select option { background: #1a1a1a; color: #fff; }
 </style>
 <title>Thank You — Miracle Veda</title>
 
