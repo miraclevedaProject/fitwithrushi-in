@@ -3070,7 +3070,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             document.getElementById('mvCheckoutPlanLabel').textContent = planName + " — ₹" + Number(amount).toLocaleString('en-IN');
             document.getElementById('mvCheckoutModal').style.display = 'flex';
             if (typeof fbq !== 'undefined') {
-                fbq('track', 'InitiateCheckout', { value: amount, currency: 'INR', content_name: planName, content_type: 'product', content_ids: ['mv-coaching-' + planName.toLowerCase().replace(/[^a-z0-9]+/g,'-')] }, { eventID: mvPendingPlan.icId });
+                fbq('track', 'AddToCart', { value: amount, currency: 'INR', content_name: planName, content_type: 'product', content_ids: ['mv-coaching-' + planName.toLowerCase().replace(/[^a-z0-9]+/g,'-')] });
             }
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'begin_checkout', {
@@ -3114,6 +3114,16 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
             btn.disabled = true;
             btn.textContent = 'Please wait...';
+
+            // Details filled in and Proceed tapped — this is the real intent
+            // signal, and it carries the same id the server will send.
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'InitiateCheckout', {
+                    value: mvPendingPlan.amount, currency: 'INR',
+                    content_name: mvPendingPlan.planName, content_type: 'product',
+                    content_ids: ['mv-coaching-' + mvPendingPlan.planName.toLowerCase().replace(/[^a-z0-9]+/g, '-')]
+                }, { eventID: mvPendingPlan.icId });
+            }
 
             try {
                 const res = await fetch(MV_API + '/api/create-order', {
