@@ -3049,6 +3049,25 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
             } catch (e) {}
             return null;
         }
+
+        // Manual Advanced Matching. The visitor has just typed these in, so the
+        // pixel can use them to recognise them on Meta. The pixel normalises and
+        // hashes each value in the browser — nothing leaves in plain text. Same
+        // details the server already sends, so both sides match the same person.
+        function mvMatch(name, phone, email, city, state) {
+            if (typeof fbq === 'undefined') return;
+            var parts = String(name || '').trim().split(/\s+/);
+            var digits = String(phone || '').replace(/\D/g, '');
+            if (digits.length === 10) digits = '91' + digits;
+            var d = { country: 'in' };
+            if (email) d.em = String(email).trim().toLowerCase();
+            if (digits) d.ph = digits;
+            if (parts[0]) d.fn = parts[0].toLowerCase();
+            if (parts.length > 1) d.ln = parts[parts.length - 1].toLowerCase();
+            if (city) d.ct = String(city).toLowerCase().replace(/[^a-z]/g, '');
+            if (state) d.st = String(state).toLowerCase().replace(/[^a-z]/g, '');
+            try { fbq('init', '3144157445775942', d); } catch (e) {}
+        }
         var __rzp = null;
         function loadRazorpay() {
             if (window.Razorpay) return Promise.resolve();
@@ -3117,6 +3136,7 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
 
             // Details filled in and Proceed tapped — this is the real intent
             // signal, and it carries the same id the server will send.
+            mvMatch(name, phone, email);
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'InitiateCheckout', {
                     value: mvPendingPlan.amount, currency: 'INR',
