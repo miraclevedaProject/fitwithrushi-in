@@ -974,8 +974,8 @@ src="https://www.facebook.com/tr?id=3144157445775942&ev=PageView&noscript=1"
                 fromAd: !!(q.get('fbclid') || q.get('utm_medium') === 'paid')
             });
             var url = 'https://miracleveda-backend.help-miracleveda.workers.dev/api/hit';
-            if (navigator.sendBeacon) navigator.sendBeacon(url, new Blob([body], { type: 'application/json' }));
-            else fetch(url, { method: 'POST', body: body, keepalive: true });
+            if (navigator.sendBeacon) navigator.sendBeacon(url, new Blob([body], { type: 'text/plain' }));
+            else fetch(url, { method: 'POST', body: body, keepalive: true, headers: { 'Content-Type': 'text/plain' } });
         } catch (e) {}
     });
     </script>
