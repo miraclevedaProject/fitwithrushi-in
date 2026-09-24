@@ -3565,5 +3565,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         else window.addEventListener('load', whenIdle);
     })();
     </script>
+<script>
+    // Counts this page view in our own database once the page has loaded, so we
+    // can see visits -> checkout -> paid without depending on anyone's dashboard.
+    window.addEventListener('load', function () {
+        try {
+            var q = new URLSearchParams(window.__mvOrigSearch || location.search);
+            var ref = document.referrer ? new URL(document.referrer).hostname : '';
+            var src = q.get('utm_source') || (ref && ref.indexOf(location.hostname) === -1 ? ref : 'direct');
+            var body = JSON.stringify({
+                path: location.pathname,
+                source: src,
+                campaign: q.get('utm_campaign') || '',
+                fromAd: !!(q.get('fbclid') || q.get('utm_medium') === 'paid')
+            });
+            var url = 'https://miracleveda-backend.help-miracleveda.workers.dev/api/hit';
+            if (navigator.sendBeacon) navigator.sendBeacon(url, new Blob([body], { type: 'application/json' }));
+            else fetch(url, { method: 'POST', body: body, keepalive: true });
+        } catch (e) {}
+    });
+    </script>
 </body>
 </html>
