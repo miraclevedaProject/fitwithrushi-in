@@ -785,7 +785,10 @@ async function sha(s){
   var h = await crypto.subtle.digest('SHA-256', b);
   return [].map.call(new Uint8Array(h), function(x){return x.toString(16).padStart(2,'0')}).join('');
 }
+var MATCHED = false;
 async function mvMatch(){
+  if(MATCHED) return;            // re-init replays PageView, so do it once only
+  MATCHED = true;
   try{
     var d = S.data, ud = {};
     if(d.email) ud.em = await sha(d.email);
