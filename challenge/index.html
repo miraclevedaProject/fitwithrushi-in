@@ -50,6 +50,19 @@ img{max-width:100%;display:block}
   border-radius:99px;transition:width .55s cubic-bezier(.4,0,.2,1)}
 .pd.on i{width:100%}
 .pd.now i{width:100%;background:linear-gradient(90deg,var(--green),#17A37A)}
+.back{
+  flex:0 0 28px;height:28px;border-radius:50%;border:1px solid var(--line-2);
+  background:var(--surface);cursor:pointer;position:relative;padding:0;
+  transition:border-color .16s,background .16s;
+}
+.back::after{
+  content:"";position:absolute;left:11px;top:9px;width:8px;height:8px;
+  border-left:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);
+  transform:rotate(45deg);
+}
+.back:hover{border-color:var(--green);background:var(--green-soft)}
+.back:active{transform:scale(.92)}
+.back[hidden]{display:none}
 .pl{font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.04em;white-space:nowrap}
 
 /* ---------- layout ---------- */
@@ -318,6 +331,7 @@ select{
 <!-- ============ PROGRESS ============ -->
 <div class="prog">
   <div class="prog-inner">
+    <button class="back" id="backBtn" aria-label="Go back" hidden></button>
     <span class="pl" id="plabel">Step 1 of 4</span>
     <span class="pd now" data-p="1"><i></i></span>
     <span class="pd" data-p="2"><i></i></span>
@@ -860,8 +874,8 @@ function go(n){
     d.classList.toggle('now', p === n);
   });
 
+  document.getElementById('backBtn').hidden = (n === 1);
   window.scrollTo({top:0, behavior:'instant'});
-  history.replaceState(null, '', '#step' + n);
   hit('step' + n);
   reveal();
   save();
@@ -888,6 +902,10 @@ document.querySelectorAll('#s1 .opt').forEach(function(b){
     fbq('track', 'ViewContent', {content_name:'90-Day Challenge', content_type:'product'});
     setTimeout(function(){ go(2); }, 260);
   });
+});
+
+document.getElementById('backBtn').addEventListener('click', function(){
+  if(S.step > 1) go(S.step - 1);
 });
 
 document.getElementById('toS3').addEventListener('click', function(){
